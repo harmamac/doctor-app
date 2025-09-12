@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل العيادة - تطبيق دكتور</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00C9A7;
+            --secondary-color: #0E7490;
+            --accent-color: #06B6D4;
+            --light-bg: #F0FDFA;
+            --white: #FFFFFF;
+            --text-dark: #134E4A;
+            --text-gray: #64748B;
+            --border-color: #E5E7EB;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --gradient: linear-gradient(135deg, #00C9A7 0%, #0E7490 100%);
+        }
+
+        body {
+            font-family: -apple-system, 'Segoe UI', Tahoma, sans-serif;
+            background: var(--light-bg);
+            min-height: 100vh;
+        }
+
+        /* Demo Navigation Header */
+        .demo-header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .demo-nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .demo-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .demo-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .demo-logo-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .demo-steps {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .step-link {
+            padding: 0.5rem 1rem;
+            background: var(--light-bg);
+            border-radius: 20px;
+            text-decoration: none;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .step-link:hover {
+            background: var(--white);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .step-link.active {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .back-to-landing {
+            padding: 0.5rem 1rem;
+            background: var(--gradient);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            min-height: calc(100vh - 80px);
+            padding: 2rem;
+        }
+
+        /* Mobile Frame */
+        .mobile-container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--white);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            background: var(--white);
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* App Header */
+        .app-header {
+            background: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .back-button {
+            width: 40px;
+            height: 40px;
+            background: var(--light-bg);
+            border: none;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-button:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .header-title {
+            flex: 1;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            width: 35px;
+            height: 35px;
+            background: var(--light-bg);
+            border: none;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* App Content */
+        .app-content {
+            height: calc(600px - 120px);
+            overflow-y: auto;
+            background: #F8F9FA;
+        }
+
+        /* Clinic Hero Section */
+        .clinic-hero {
+            background: white;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .clinic-main-info {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .clinic-logo {
+            width: 100px;
+            height: 100px;
+            background: var(--gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            flex-shrink: 0;
+        }
+
+        .clinic-details {
+            flex: 1;
+        }
+
+        .clinic-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .clinic-type {
+            color: var(--text-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .clinic-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stars {
+            color: var(--warning);
+        }
+
+        .rating-text {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .reviews-count {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .clinic-status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: var(--success);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .clinic-status.closed {
+            background: var(--error);
+        }
+
+        /* Quick Info */
+        .quick-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .info-item {
+            text-align: center;
+            padding: 0.8rem;
+            background: var(--light-bg);
+            border-radius: 12px;
+        }
+
+        .info-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+            margin-bottom: 0.2rem;
+        }
+
+        .info-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Tabs */
+        .tabs-container {
+            background: white;
+            padding: 0 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+        }
+
+        .tabs-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            padding: 1rem 0;
+            border-bottom: 3px solid transparent;
+            color: var(--text-gray);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        /* Departments Section */
+        .departments-section {
+            padding: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .departments-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .department-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            border: 2px solid transparent;
+        }
+
+        .department-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary-color);
+        }
+
+        .department-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 0.8rem;
+        }
+
+        .department-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .department-doctors {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+        }
+
+        /* About Section */
+        .about-section {
+            background: white;
+            padding: 1.5rem;
+            margin: 1rem;
+            border-radius: 15px;
+        }
+
+        .about-text {
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        /* Services */
+        .services-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .service-tag {
+            padding: 0.4rem 0.8rem;
+            background: var(--light-bg);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: white;
+            padding: 1.5rem;
+            margin: 1rem;
+            border-radius: 15px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--light-bg);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-label {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            margin-bottom: 0.2rem;
+        }
+
+        .contact-value {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Bottom Action */
+        .bottom-action {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .view-doctors-btn {
+            flex: 1;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .view-doctors-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .call-btn {
+            width: 50px;
+            height: 50px;
+            background: var(--success);
+            border: none;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .call-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .demo-steps {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-container {
+                border-radius: 0;
+                max-width: 100%;
+                height: 100vh;
+            }
+
+            .app-content {
+                height: calc(100vh - 180px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Demo Navigation Header -->
+    <header class="demo-header">
+        <nav class="demo-nav">
+            <a href="../landing/index.html" class="demo-logo">
+                <div class="demo-logo-icon">🏥</div>
+                <div class="demo-logo-text">دكتور - عرض التطبيق</div>
+            </a>
+            
+            <div class="demo-steps">
+                <a href="app-login.html" class="step-link">1. تسجيل الدخول</a>
+                <a href="app-otp.html" class="step-link">2. رمز التحقق</a>
+                <a href="app-location.html" class="step-link">3. الموقع</a>
+                <a href="app-home.html" class="step-link">4. الرئيسية</a>
+                <a href="app-clinic-details.html" class="step-link active">5. العيادة</a>
+                <a href="app-doctor-profile.html" class="step-link">6. الطبيب</a>
+                <a href="app-booking.html" class="step-link">7. الحجز</a>
+                <a href="app-confirmation.html" class="step-link">8. التأكيد</a>
+            </div>
+            
+            <a href="../landing/index.html" class="back-to-landing">↰ رجوع للموقع</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Mobile Container -->
+        <div class="mobile-container">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="status-time">9:41</div>
+                <div class="status-icons">
+                    <span>📶</span>
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+
+            <!-- App Header -->
+            <div class="app-header">
+                <button class="back-button" onclick="window.location.href='app-home.html'">
+                    →
+                </button>
+                <h1 class="header-title">تفاصيل العيادة</h1>
+                <div class="header-actions">
+                    <button class="action-btn">❤️</button>
+                    <button class="action-btn">↗️</button>
+                </div>
+            </div>
+
+            <!-- App Content -->
+            <div class="app-content">
+                <!-- Clinic Hero Section -->
+                <div class="clinic-hero">
+                    <div class="clinic-main-info">
+                        <div class="clinic-logo">🏥</div>
+                        <div class="clinic-details">
+                            <h2 class="clinic-name">مركز الشفاء الطبي</h2>
+                            <p class="clinic-type">مركز طبي متعدد التخصصات</p>
+                            <div class="clinic-rating">
+                                <span class="stars">⭐⭐⭐⭐⭐</span>
+                                <span class="rating-text">4.8</span>
+                                <span class="reviews-count">(234 تقييم)</span>
+                            </div>
+                            <span class="clinic-status">● مفتوح الآن</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Info -->
+                    <div class="quick-info">
+                        <div class="info-item">
+                            <div class="info-icon">📍</div>
+                            <div class="info-label">المسافة</div>
+                            <div class="info-value">2.5 كم</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">⏰</div>
+                            <div class="info-label">ساعات العمل</div>
+                            <div class="info-value">9ص - 10م</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-icon">👥</div>
+                            <div class="info-label">الأطباء</div>
+                            <div class="info-value">15 طبيب</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs-container">
+                    <div class="tab active">الأقسام</div>
+                    <div class="tab">عن العيادة</div>
+                    <div class="tab">التقييمات</div>
+                    <div class="tab">الموقع</div>
+                </div>
+
+                <!-- Departments Section -->
+                <div class="departments-section">
+                    <h3 class="section-title">الأقسام المتوفرة</h3>
+                    
+                    <div class="departments-grid">
+                        <a href="app-doctor-profile.html" class="department-card">
+                            <div class="department-icon">❤️</div>
+                            <div class="department-name">قسم القلب</div>
+                            <div class="department-doctors">3 أطباء</div>
+                        </a>
+
+                        <a href="app-doctor-profile.html" class="department-card">
+                            <div class="department-icon">🦷</div>
+                            <div class="department-name">قسم الأسنان</div>
+                            <div class="department-doctors">4 أطباء</div>
+                        </a>
+
+                        <a href="app-doctor-profile.html" class="department-card">
+                            <div class="department-icon">👶</div>
+                            <div class="department-name">قسم الأطفال</div>
+                            <div class="department-doctors">2 أطباء</div>
+                        </a>
+
+                        <a href="app-doctor-profile.html" class="department-card">
+                            <div class="department-icon">🦴</div>
+                            <div class="department-name">قسم العظام</div>
+                            <div class="department-doctors">2 أطباء</div>
+                        </a>
+
+                        <a href="app-doctor-profile.html" class="department-card">
+                            <div class="department-icon">👁️</div>
+                            <div class="department-name">قسم العيون</div>
+                            <div class="department-doctors">2 أطباء</div>
+                        </a>
+
+                        <a href="app-doctor-profile.html" class="department-card">
+                            <div class="department-icon">🧠</div>
+                            <div class="department-name">قسم الأعصاب</div>
+                            <div class="department-doctors">2 أطباء</div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- About Section -->
+                <div class="about-section">
+                    <h3 class="section-title">عن المركز</h3>
+                    <p class="about-text">
+                        مركز الشفاء الطبي هو أحد أكبر المراكز الطبية في طرابلس، يقدم خدمات طبية شاملة 
+                        بأحدث الأجهزة والتقنيات. لدينا فريق من الأطباء المتخصصين ذوي الخبرة العالية.
+                    </p>
+                    
+                    <h4 style="font-weight: 600; margin-bottom: 0.5rem;">الخدمات المتوفرة</h4>
+                    <div class="services-list">
+                        <span class="service-tag">أشعة سينية</span>
+                        <span class="service-tag">تحاليل طبية</span>
+                        <span class="service-tag">طوارئ 24/7</span>
+                        <span class="service-tag">عمليات جراحية</span>
+                        <span class="service-tag">عناية مركزة</span>
+                    </div>
+                </div>
+
+                <!-- Contact Section -->
+                <div class="contact-section">
+                    <h3 class="section-title">معلومات التواصل</h3>
+                    
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div class="contact-info">
+                            <div class="contact-label">العنوان</div>
+                            <div class="contact-value">شارع الجمهورية، طرابلس</div>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">📞</div>
+                        <div class="contact-info">
+                            <div class="contact-label">الهاتف</div>
+                            <div class="contact-value">021-3456789</div>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">✉️</div>
+                        <div class="contact-info">
+                            <div class="contact-label">البريد الإلكتروني</div>
+                            <div class="contact-value">info@alshifa-clinic.ly</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spacer for bottom action -->
+                <div style="height: 80px;"></div>
+            </div>
+
+            <!-- Bottom Action -->
+            <div class="bottom-action">
+                <button class="view-doctors-btn" onclick="window.location.href='app-doctor-profile.html'">
+                    عرض الأطباء المتاحين
+                </button>
+                <button class="call-btn">📞</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active from all tabs
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                // Add active to clicked tab
+                this.classList.add('active');
+                
+                // Here you would show/hide different content based on selected tab
+                console.log('Selected tab:', this.textContent);
+            });
+        });
+
+        // Favorite button
+        document.querySelectorAll('.action-btn')[0].addEventListener('click', function() {
+            if (this.textContent === '❤️') {
+                this.textContent = '💔';
+                alert('تمت الإزالة من المفضلة');
+            } else {
+                this.textContent = '❤️';
+                alert('تمت الإضافة إلى المفضلة');
+            }
+        });
+
+        // Share button
+        document.querySelectorAll('.action-btn')[1].addEventListener('click', function() {
+            alert('مشاركة معلومات العيادة');
+        });
+
+        // Call button
+        document.querySelector('.call-btn').addEventListener('click', function() {
+            alert('الاتصال بـ: 021-3456789');
+        });
+    </script>
+</body>
+</html>

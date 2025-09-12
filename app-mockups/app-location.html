@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحديد الموقع - تطبيق دكتور</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00C9A7;
+            --secondary-color: #0E7490;
+            --accent-color: #06B6D4;
+            --light-bg: #F0FDFA;
+            --white: #FFFFFF;
+            --text-dark: #134E4A;
+            --text-gray: #64748B;
+            --border-color: #E5E7EB;
+            --success: #10B981;
+            --error: #EF4444;
+            --gradient: linear-gradient(135deg, #00C9A7 0%, #0E7490 100%);
+        }
+
+        body {
+            font-family: -apple-system, 'Segoe UI', Tahoma, sans-serif;
+            background: var(--light-bg);
+            min-height: 100vh;
+        }
+
+        /* Demo Navigation Header */
+        .demo-header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .demo-nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .demo-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .demo-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .demo-logo-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .demo-steps {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .step-link {
+            padding: 0.5rem 1rem;
+            background: var(--light-bg);
+            border-radius: 20px;
+            text-decoration: none;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .step-link:hover {
+            background: var(--white);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .step-link.active {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .back-to-landing {
+            padding: 0.5rem 1rem;
+            background: var(--gradient);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .back-to-landing:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 80px);
+            padding: 2rem;
+        }
+
+        /* Mobile Frame */
+        .mobile-container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--white);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            background: var(--white);
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .status-time {
+            font-weight: 600;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* App Content */
+        .app-content {
+            padding: 2rem;
+            min-height: calc(600px - 60px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Location Section */
+        .location-section {
+            text-align: center;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Map Illustration */
+        .map-illustration {
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 2rem;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .map-bg {
+            width: 100%;
+            height: 100%;
+            background: var(--light-bg);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(0deg, var(--border-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border-color) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.3;
+        }
+
+        .location-pin {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 50% 50% 50% 0;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            box-shadow: 0 10px 30px rgba(0, 201, 167, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) rotate(-45deg) scale(1);
+            }
+            50% {
+                transform: translate(-50%, -50%) rotate(-45deg) scale(1.1);
+            }
+        }
+
+        .location-pin-icon {
+            transform: rotate(45deg);
+            font-size: 1.8rem;
+        }
+
+        .location-circles {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .circle {
+            position: absolute;
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            opacity: 0;
+            animation: ripple 3s linear infinite;
+        }
+
+        .circle:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .circle:nth-child(2) {
+            animation-delay: 1s;
+        }
+
+        .circle:nth-child(3) {
+            animation-delay: 2s;
+        }
+
+        @keyframes ripple {
+            0% {
+                width: 40px;
+                height: 40px;
+                opacity: 1;
+                top: -20px;
+                left: -20px;
+            }
+            100% {
+                width: 150px;
+                height: 150px;
+                opacity: 0;
+                top: -75px;
+                left: -75px;
+            }
+        }
+
+        /* Content */
+        .location-title {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .location-subtitle {
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+
+        /* Buttons */
+        .location-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .allow-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 10px 30px rgba(0, 201, 167, 0.3);
+        }
+
+        .allow-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 201, 167, 0.4);
+        }
+
+        .manual-btn {
+            background: white;
+            color: var(--text-dark);
+            border: 2px solid var(--border-color);
+            padding: 1.2rem;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .manual-btn:hover {
+            background: var(--light-bg);
+            border-color: var(--primary-color);
+        }
+
+        /* City Selection */
+        .city-selection {
+            display: none;
+            animation: slideUp 0.5s ease;
+        }
+
+        .city-selection.show {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .city-select-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .city-select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        .city-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 201, 167, 0.1);
+        }
+
+        .continue-btn {
+            width: 100%;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .continue-btn.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .continue-btn.active:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 201, 167, 0.3);
+        }
+
+        /* Skip Link */
+        .skip-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .skip-btn {
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .skip-btn:hover {
+            color: var(--primary-color);
+        }
+
+        /* Features */
+        .location-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+
+        .feature-icon {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        /* Loading */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .location-loading {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            animation: locatePulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes locatePulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(0, 201, 167, 0.7);
+            }
+            50% {
+                transform: scale(1.1);
+                box-shadow: 0 0 0 20px rgba(0, 201, 167, 0);
+            }
+        }
+
+        .loading-text {
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .demo-steps {
+                display: none;
+            }
+
+            .demo-nav {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-container {
+                border-radius: 0;
+                max-width: 100%;
+            }
+
+            .map-illustration {
+                width: 200px;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Demo Navigation Header -->
+    <header class="demo-header">
+        <nav class="demo-nav">
+            <a href="../landing/index.html" class="demo-logo">
+                <div class="demo-logo-icon">🏥</div>
+                <div class="demo-logo-text">دكتور - عرض التطبيق</div>
+            </a>
+            
+            <div class="demo-steps">
+                <a href="app-login.html" class="step-link">1. تسجيل الدخول</a>
+                <a href="app-otp.html" class="step-link">2. رمز التحقق</a>
+                <a href="app-location.html" class="step-link active">3. الموقع</a>
+                <a href="app-home.html" class="step-link">4. الرئيسية</a>
+                <a href="app-clinic-details.html" class="step-link">5. العيادة</a>
+                <a href="app-doctor-profile.html" class="step-link">6. الطبيب</a>
+                <a href="app-booking.html" class="step-link">7. الحجز</a>
+                <a href="app-confirmation.html" class="step-link">8. التأكيد</a>
+            </div>
+            
+            <a href="../landing/index.html" class="back-to-landing">↰ رجوع للموقع</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="location-loading">📍</div>
+            <p class="loading-text">جاري تحديد موقعك...</p>
+        </div>
+
+        <!-- Mobile Container -->
+        <div class="mobile-container">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="status-time">9:41</div>
+                <div class="status-icons">
+                    <span>📶</span>
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+
+            <!-- App Content -->
+            <div class="app-content">
+                <div class="location-section">
+                    <!-- Map Illustration -->
+                    <div class="map-illustration">
+                        <div class="map-bg">
+                            <div class="map-grid"></div>
+                            <div class="location-circles">
+                                <div class="circle"></div>
+                                <div class="circle"></div>
+                                <div class="circle"></div>
+                            </div>
+                            <div class="location-pin">
+                                <span class="location-pin-icon">📍</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content -->
+                    <h2 class="location-title">السماح بتحديد الموقع</h2>
+                    <p class="location-subtitle">
+                        نحتاج لمعرفة موقعك لنعرض لك أقرب العيادات والأطباء في منطقتك
+                    </p>
+
+                    <!-- Buttons -->
+                    <div class="location-buttons">
+                        <button class="allow-btn" onclick="requestLocation()">
+                            <span>📍</span>
+                            <span>السماح بالوصول للموقع</span>
+                        </button>
+                        
+                        <button class="manual-btn" onclick="showCitySelection()">
+                            <span>🏙️</span>
+                            <span>اختيار المدينة يدوياً</span>
+                        </button>
+                    </div>
+
+                    <!-- City Selection (Hidden by default) -->
+                    <div class="city-selection" id="citySelection">
+                        <label class="city-select-label">اختر مدينتك</label>
+                        <select class="city-select" id="citySelect" onchange="enableContinue()">
+                            <option value="">-- اختر المدينة --</option>
+                            <option value="tripoli">طرابلس</option>
+                            <option value="benghazi">بنغازي</option>
+                            <option value="misrata">مصراتة</option>
+                            <option value="bayda">البيضاء</option>
+                            <option value="zawiya">الزاوية</option>
+                            <option value="zliten">زليتن</option>
+                            <option value="tobruk">طبرق</option>
+                            <option value="ajdabiya">اجدابيا</option>
+                            <option value="sabha">سبها</option>
+                            <option value="khoms">الخمس</option>
+                            <option value="derna">درنة</option>
+                            <option value="sirte">سرت</option>
+                            <option value="gharyan">غريان</option>
+                            <option value="marj">المرج</option>
+                        </select>
+                        <button class="continue-btn" id="continueBtn" onclick="continueWithCity()">
+                            متابعة
+                        </button>
+                    </div>
+
+                    <!-- Skip Link -->
+                    <div class="skip-link">
+                        <button class="skip-btn" onclick="skipLocation()">
+                            تخطي الآن
+                        </button>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="location-features">
+                        <div class="feature">
+                            <span class="feature-icon">✓</span>
+                            <span>عيادات قريبة</span>
+                        </div>
+                        <div class="feature">
+                            <span class="feature-icon">✓</span>
+                            <span>نتائج دقيقة</span>
+                        </div>
+                        <div class="feature">
+                            <span class="feature-icon">✓</span>
+                            <span>توفير الوقت</span>
+                        </div>
+                        <div class="feature">
+                            <span class="feature-icon">✓</span>
+                            <span>خدمة أفضل</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Request location permission
+        function requestLocation() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.classList.add('show');
+            
+            // Simulate getting location
+            setTimeout(() => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            // Success - got location
+                            localStorage.setItem('userLocation', JSON.stringify({
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                                city: 'طرابلس' // Would be determined by reverse geocoding
+                            }));
+                            
+                            // Redirect to home
+                            setTimeout(() => {
+                                window.location.href = 'app-home.html';
+                            }, 500);
+                        },
+                        (error) => {
+                            // Error - show manual selection
+                            loadingOverlay.classList.remove('show');
+                            alert('لم نتمكن من تحديد موقعك. الرجاء اختيار المدينة يدوياً');
+                            showCitySelection();
+                        }
+                    );
+                } else {
+                    // Browser doesn't support geolocation
+                    loadingOverlay.classList.remove('show');
+                    alert('المتصفح لا يدعم تحديد الموقع. الرجاء اختيار المدينة يدوياً');
+                    showCitySelection();
+                }
+            }, 1500);
+        }
+
+        // Show city selection
+        function showCitySelection() {
+            const citySelection = document.getElementById('citySelection');
+            citySelection.classList.add('show');
+            
+            // Scroll to city selection
+            citySelection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Enable continue button when city is selected
+        function enableContinue() {
+            const citySelect = document.getElementById('citySelect');
+            const continueBtn = document.getElementById('continueBtn');
+            
+            if (citySelect.value) {
+                continueBtn.classList.add('active');
+            } else {
+                continueBtn.classList.remove('active');
+            }
+        }
+
+        // Continue with selected city
+        function continueWithCity() {
+            const citySelect = document.getElementById('citySelect');
+            
+            if (citySelect.value) {
+                // Save city to localStorage
+                localStorage.setItem('userLocation', JSON.stringify({
+                    city: citySelect.options[citySelect.selectedIndex].text,
+                    cityId: citySelect.value
+                }));
+                
+                // Show loading
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                loadingOverlay.classList.add('show');
+                
+                // Redirect to home
+                setTimeout(() => {
+                    window.location.href = 'app-home.html';
+                }, 1500);
+            }
+        }
+
+        // Skip location
+        function skipLocation() {
+            // Set default location
+            localStorage.setItem('userLocation', JSON.stringify({
+                city: 'طرابلس',
+                cityId: 'tripoli',
+                skipped: true
+            }));
+            
+            // Redirect to home
+            window.location.href = 'app-home.html';
+        }
+
+        // Demo: Auto-proceed with Ctrl+Enter
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                requestLocation();
+            }
+        });
+    </script>
+</body>
+</html>

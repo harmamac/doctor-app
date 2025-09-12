@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الرئيسية - تطبيق دكتور</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00C9A7;
+            --secondary-color: #0E7490;
+            --accent-color: #06B6D4;
+            --light-bg: #F0FDFA;
+            --white: #FFFFFF;
+            --text-dark: #134E4A;
+            --text-gray: #64748B;
+            --border-color: #E5E7EB;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --gradient: linear-gradient(135deg, #00C9A7 0%, #0E7490 100%);
+        }
+
+        body {
+            font-family: -apple-system, 'Segoe UI', Tahoma, sans-serif;
+            background: var(--light-bg);
+            min-height: 100vh;
+        }
+
+        /* Demo Navigation Header */
+        .demo-header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .demo-nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .demo-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .demo-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .demo-logo-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .demo-steps {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .step-link {
+            padding: 0.5rem 1rem;
+            background: var(--light-bg);
+            border-radius: 20px;
+            text-decoration: none;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .step-link:hover {
+            background: var(--white);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .step-link.active {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .back-to-landing {
+            padding: 0.5rem 1rem;
+            background: var(--gradient);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .back-to-landing:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            min-height: calc(100vh - 80px);
+            padding: 2rem;
+        }
+
+        /* Mobile Frame */
+        .mobile-container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--white);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            background: var(--white);
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* App Header */
+        .app-header {
+            background: var(--gradient);
+            padding: 1.5rem 1rem 1rem;
+            color: white;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .location-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .location-icon {
+            font-size: 1.2rem;
+        }
+
+        .location-text {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .location-city {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .header-btn {
+            width: 35px;
+            height: 35px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .header-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Search Bar */
+        .search-bar {
+            background: white;
+            border-radius: 15px;
+            padding: 0.8rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-icon {
+            color: var(--text-gray);
+            font-size: 1.2rem;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-gray);
+        }
+
+        .filter-btn {
+            background: var(--light-bg);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--text-dark);
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Categories */
+        .categories {
+            display: flex;
+            gap: 0.5rem;
+            padding-bottom: 1rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-chip {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .category-chip:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .category-chip.active {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        /* App Content */
+        .app-content {
+            padding: 1rem;
+            height: calc(600px - 250px);
+            overflow-y: auto;
+            background: #F8F9FA;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .view-all {
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: normal;
+        }
+
+        /* Clinic Cards */
+        .clinics-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .clinic-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .clinic-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .clinic-header {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .clinic-image {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .clinic-info {
+            flex: 1;
+        }
+
+        .clinic-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 0.3rem;
+        }
+
+        .clinic-specialty {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-bottom: 0.3rem;
+        }
+
+        .clinic-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .rating-stars {
+            color: var(--warning);
+            font-size: 0.9rem;
+        }
+
+        .rating-number {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .rating-count {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+        }
+
+        .clinic-details {
+            display: flex;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .clinic-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.85rem;
+            color: var(--text-gray);
+        }
+
+        .detail-icon {
+            color: var(--primary-color);
+        }
+
+        .clinic-status {
+            margin-right: auto;
+        }
+
+        .status-open {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .status-closed {
+            color: var(--error);
+            font-weight: 600;
+        }
+
+        /* Featured Badge */
+        .featured-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--warning);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            background: white;
+            border-top: 1px solid var(--border-color);
+            padding: 0.5rem;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            padding: 0.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text-gray);
+            font-size: 0.75rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: var(--light-bg);
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: absolute;
+            bottom: 80px;
+            left: 1rem;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .demo-steps {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-container {
+                border-radius: 0;
+                max-width: 100%;
+                height: 100vh;
+            }
+
+            .app-content {
+                height: calc(100vh - 350px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Demo Navigation Header -->
+    <header class="demo-header">
+        <nav class="demo-nav">
+            <a href="../landing/index.html" class="demo-logo">
+                <div class="demo-logo-icon">🏥</div>
+                <div class="demo-logo-text">دكتور - عرض التطبيق</div>
+            </a>
+            
+            <div class="demo-steps">
+                <a href="app-login.html" class="step-link">1. تسجيل الدخول</a>
+                <a href="app-otp.html" class="step-link">2. رمز التحقق</a>
+                <a href="app-location.html" class="step-link">3. الموقع</a>
+                <a href="app-home.html" class="step-link active">4. الرئيسية</a>
+                <a href="app-clinic-details.html" class="step-link">5. العيادة</a>
+                <a href="app-doctor-profile.html" class="step-link">6. الطبيب</a>
+                <a href="app-booking.html" class="step-link">7. الحجز</a>
+                <a href="app-confirmation.html" class="step-link">8. التأكيد</a>
+            </div>
+            
+            <a href="../landing/index.html" class="back-to-landing">↰ رجوع للموقع</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Mobile Container -->
+        <div class="mobile-container">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="status-time">9:41</div>
+                <div class="status-icons">
+                    <span>📶</span>
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+
+            <!-- App Header -->
+            <div class="app-header">
+                <div class="header-top">
+                    <div class="location-info">
+                        <span class="location-icon">📍</span>
+                        <div>
+                            <div class="location-text">موقعك الحالي</div>
+                            <div class="location-city">طرابلس</div>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="header-btn">🔔</button>
+                        <button class="header-btn">👤</button>
+                    </div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" placeholder="ابحث عن عيادة، طبيب، أو تخصص...">
+                    <button class="filter-btn">⚙️</button>
+                </div>
+
+                <!-- Categories -->
+                <div class="categories">
+                    <span class="category-chip active">الكل</span>
+                    <span class="category-chip">عيادات</span>
+                    <span class="category-chip">مستشفيات</span>
+                    <span class="category-chip">مراكز طبية</span>
+                    <span class="category-chip">عيادات أسنان</span>
+                </div>
+            </div>
+
+            <!-- App Content -->
+            <div class="app-content">
+                <!-- Section: Nearby Clinics -->
+                <div class="section-title">
+                    <span>العيادات القريبة منك</span>
+                    <a href="#" class="view-all">عرض الكل</a>
+                </div>
+
+                <div class="clinics-grid">
+                    <!-- Clinic Card 1 -->
+                    <a href="app-clinic-details.html" class="clinic-card">
+                        <div class="featured-badge">مميز</div>
+                        <div class="clinic-header">
+                            <div class="clinic-image">🏥</div>
+                            <div class="clinic-info">
+                                <h3 class="clinic-name">مركز الشفاء الطبي</h3>
+                                <p class="clinic-specialty">متعدد التخصصات</p>
+                                <div class="clinic-rating">
+                                    <span class="rating-stars">⭐⭐⭐⭐⭐</span>
+                                    <span class="rating-number">4.8</span>
+                                    <span class="rating-count">(234 تقييم)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clinic-details">
+                            <div class="clinic-detail">
+                                <span class="detail-icon">📍</span>
+                                <span>2.5 كم</span>
+                            </div>
+                            <div class="clinic-detail">
+                                <span class="detail-icon">⏰</span>
+                                <span>9ص - 10م</span>
+                            </div>
+                            <div class="clinic-detail">
+                                <span class="detail-icon">👥</span>
+                                <span>15 طبيب</span>
+                            </div>
+                            <div class="clinic-detail clinic-status">
+                                <span class="status-open">● مفتوح الآن</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Clinic Card 2 -->
+                    <a href="app-clinic-details.html" class="clinic-card">
+                        <div class="clinic-header">
+                            <div class="clinic-image">🦷</div>
+                            <div class="clinic-info">
+                                <h3 class="clinic-name">عيادة الابتسامة</h3>
+                                <p class="clinic-specialty">طب الأسنان</p>
+                                <div class="clinic-rating">
+                                    <span class="rating-stars">⭐⭐⭐⭐⭐</span>
+                                    <span class="rating-number">4.9</span>
+                                    <span class="rating-count">(189 تقييم)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clinic-details">
+                            <div class="clinic-detail">
+                                <span class="detail-icon">📍</span>
+                                <span>3.1 كم</span>
+                            </div>
+                            <div class="clinic-detail">
+                                <span class="detail-icon">⏰</span>
+                                <span>8ص - 8م</span>
+                            </div>
+                            <div class="clinic-detail">
+                                <span class="detail-icon">👥</span>
+                                <span>8 أطباء</span>
+                            </div>
+                            <div class="clinic-detail clinic-status">
+                                <span class="status-open">● مفتوح الآن</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Clinic Card 3 -->
+                    <a href="app-clinic-details.html" class="clinic-card">
+                        <div class="clinic-header">
+                            <div class="clinic-image">👶</div>
+                            <div class="clinic-info">
+                                <h3 class="clinic-name">عيادة الأطفال التخصصية</h3>
+                                <p class="clinic-specialty">طب الأطفال</p>
+                                <div class="clinic-rating">
+                                    <span class="rating-stars">⭐⭐⭐⭐</span>
+                                    <span class="rating-number">4.6</span>
+                                    <span class="rating-count">(156 تقييم)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clinic-details">
+                            <div class="clinic-detail">
+                                <span class="detail-icon">📍</span>
+                                <span>4.2 كم</span>
+                            </div>
+                            <div class="clinic-detail">
+                                <span class="detail-icon">⏰</span>
+                                <span>9ص - 9م</span>
+                            </div>
+                            <div class="clinic-detail">
+                                <span class="detail-icon">👥</span>
+                                <span>6 أطباء</span>
+                            </div>
+                            <div class="clinic-detail clinic-status">
+                                <span class="status-closed">● مغلق</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Clinic Card 4 -->
+                    <a href="app-clinic-details.html" class="clinic-card">
+                        <div class="clinic-header">
+                            <div class="clinic-image">👁️</div>
+                            <div class="clinic-info">
+                                <h3 class="clinic-name">مركز النور للعيون</h3>
+                                <p class="clinic-specialty">طب العيون</p>
+                                <div class="clinic-rating">
+                                    <span class="rating-stars">⭐⭐⭐⭐⭐</span>
+                                    <span class="rating-number">4.7</span>
+                                    <span class="rating-count">(298 تقييم)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clinic-details">
+                            <div class="clinic-detail">
+                                <span class="detail-icon">📍</span>
+                                <span>5.0 كم</span>
+                            </div>
+                            <div class="clinic-detail">
+                                <span class="detail-icon">⏰</span>
+                                <span>8ص - 6م</span>
+                            </div>
+                            <div class="clinic-detail">
+                                <span class="detail-icon">👥</span>
+                                <span>10 أطباء</span>
+                            </div>
+                            <div class="clinic-detail clinic-status">
+                                <span class="status-open">● مفتوح الآن</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Floating Action Button -->
+            <div class="fab" onclick="showMap()">🗺️</div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+                <div class="nav-item active">
+                    <span class="nav-icon">🏠</span>
+                    <span>الرئيسية</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='app-search.html'">
+                    <span class="nav-icon">🔍</span>
+                    <span>بحث</span>
+                </div>
+                <div class="nav-item">
+                    <span class="nav-icon">📅</span>
+                    <span>مواعيدي</span>
+                </div>
+                <div class="nav-item" onclick="window.location.href='app-user-profile.html'">
+                    <span class="nav-icon">👤</span>
+                    <span>حسابي</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Get user location from localStorage
+        const userLocation = JSON.parse(localStorage.getItem('userLocation') || '{"city": "طرابلس"}');
+        document.querySelector('.location-city').textContent = userLocation.city;
+
+        // Search functionality
+        document.querySelector('.search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.clinic-card');
+            
+            cards.forEach(card => {
+                const name = card.querySelector('.clinic-name').textContent.toLowerCase();
+                const specialty = card.querySelector('.clinic-specialty').textContent.toLowerCase();
+                
+                if (name.includes(searchTerm) || specialty.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Category filter
+        document.querySelectorAll('.category-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                // Remove active from all
+                document.querySelectorAll('.category-chip').forEach(c => c.classList.remove('active'));
+                // Add active to clicked
+                this.classList.add('active');
+                
+                // Filter logic would go here
+                console.log('Filter by:', this.textContent);
+            });
+        });
+
+        // Show map (placeholder)
+        function showMap() {
+            alert('عرض الخريطة - سيتم تنفيذها لاحقاً');
+        }
+
+        // Notification bell
+        document.querySelector('.header-btn').addEventListener('click', function() {
+            alert('لديك 3 إشعارات جديدة');
+        });
+    </script>
+</body>
+</html>
