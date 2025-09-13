@@ -147,50 +147,51 @@
         }
 
         /* App Header */
-        .app-header {
-            background: var(--gradient);
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-        }
+.app-header {
+    background: var(--gradient);
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+    position: relative; /* لإمكان وضع زر الرجوع بشكل مطلق */
+}
 
-        .back-button {
-            position: absolute;
-            left: 1rem;
-            top: 1rem;
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.2);
-            border: none;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: white;
-        }
+.back-button {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    width: 35px; /* تقليل الحجم قليلاً */
+    height: 35px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem; /* تقليل حجم الخط */
+    cursor: pointer;
+    transition: all 0.3s;
+    color: #fff;
+}
 
-        .back-button:hover {
-            background: rgba(255,255,255,0.3);
-        }
+.back-button:hover {
+    background: rgba(255,255,255,0.3);
+}
 
-        .header-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
+.header-icon {
+    font-size: 2.5rem; /* أصغر قليلاً */
+    margin-bottom: 0.8rem;
+}
 
-        .header-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
+.header-title {
+    font-size: 1.2rem; /* أصغر */
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+}
 
-        .header-subtitle {
-            font-size: 0.95rem;
-            opacity: 0.9;
-        }
+.header-subtitle {
+    font-size: 0.8rem; /* أصغر */
+    opacity: 0.9;
+}
 
         /* Progress Steps */
         .progress-steps {
@@ -247,18 +248,18 @@
             overflow-y: auto;
             background: #F8F9FA;
         } */
-         .app-content {
-    width: 400px; /* أو حسب الحجم الذي تريده */
-    max-width: 90%;
-    margin: 0 auto;
-    height: auto; /* اجعله يتكيف مع المحتوى */
-    max-height: 65vh; /* حد أقصى للارتفاع نسبةً إلى ارتفاع النافذة */
-    overflow-y: auto; /* للسماح بالتمرير عند الحاجة */
-    padding: 1rem;
-    background: #F8F9FA;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
+        .app-content {
+        width: 400px; /* أو حسب الحجم الذي تريده */
+        max-width: 90%;
+        margin: 0 auto;
+        height: auto; /* اجعله يتكيف مع المحتوى */
+        max-height: 65vh; /* حد أقصى للارتفاع نسبةً إلى ارتفاع النافذة */
+        overflow-y: auto; /* للسماح بالتمرير عند الحاجة */
+        padding: 1rem;
+        background: #F8F9FA;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
 
         /* Booking Summary Card */
         .booking-card {

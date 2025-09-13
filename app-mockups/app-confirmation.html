@@ -148,98 +148,103 @@
         }
 
         /* Success Header */
-        .success-header {
-            background: var(--success-gradient);
-            color: white;
-            padding: 2rem 1.5rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+.success-header {
+    background: var(--success-gradient);
+    color: white;
+    padding: 1rem 1rem; /* تم تقليل الحشو */
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
 
-        .success-header::before {
-            content: '';
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            top: -100px;
-            right: -100px;
-        }
+.success-header::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    top: -100px;
+    right: -100px;
+}
 
-        .success-header::after {
-            content: '';
-            position: absolute;
-            width: 150px;
-            height: 150px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 50%;
-            bottom: -75px;
-            left: -75px;
-        }
+.success-header::after {
+    content: '';
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+    bottom: -75px;
+    left: -75px;
+}
 
-        .success-icon {
-            width: 80px;
-            height: 80px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            margin: 0 auto 1rem;
-            position: relative;
-            z-index: 1;
-            animation: successPulse 1s ease;
-        }
+.success-icon {
+    width: 60px; /* تم تقليل الحجم */
+    height: 60px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem; /* تم تقليل حجم الخط */
+    margin: 0 auto 1rem;
+    position: relative;
+    z-index: 1;
+    animation: successPulse 1s ease;
+}
 
-        @keyframes successPulse {
-            0% {
-                transform: scale(0);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
+@keyframes successPulse {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
 
-        .success-title {
-            font-size: 1.8rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 1;
-        }
+.success-title {
+    font-size: 1.4rem; /* تم تقليل حجم الخط */
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
 
-        .success-subtitle {
-            font-size: 1rem;
-            opacity: 0.95;
-            position: relative;
-            z-index: 1;
-        }
+.success-subtitle {
+    font-size: 0.9rem; /* تم تقليل الحجم */
+    opacity: 0.95;
+    position: relative;
+    z-index: 1;
+}
 
-        .booking-number {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            margin-top: 1rem;
-            font-weight: 600;
-            position: relative;
-            z-index: 1;
-        }
+.booking-number {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 0.3rem 0.8rem; /* تم تقليل الحشو */
+    border-radius: 20px;
+    margin-top: 1rem;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+    font-size: 0.9rem; /* أضيف حجم خط أصغر إذا رغبت */
+}
 
         /* App Content */
         .app-content {
+            width: 400px; /* أو حسب الحجم الذي تريده */
+            max-width: 90%;
+            margin: 0 auto;
+            height: auto; /* اجعله يتكيف مع المحتوى */
+            max-height: 70vh; /* حد أقصى للارتفاع نسبةً إلى ارتفاع النافذة */
+            overflow-y: auto; /* للسماح بالتمرير عند الحاجة */
             padding: 1rem;
-            height: calc(600px - 250px);
-            overflow-y: auto;
             background: #F8F9FA;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         /* Confirmation Cards */

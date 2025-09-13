@@ -184,9 +184,16 @@
 
         /* App Content */
         .app-content {
-            height: calc(600px - 120px);
-            overflow-y: auto;
-            background: #F8F9FA;
+        width: 400px; /* أو حسب الحجم الذي تريده */
+        max-width: 90%;
+        margin: 0 auto;
+        height: auto; /* اجعله يتكيف مع المحتوى */
+        max-height: 73vh; /* حد أقصى للارتفاع نسبةً إلى ارتفاع النافذة */
+        overflow-y: auto; /* للسماح بالتمرير عند الحاجة */
+        padding: 1rem;
+        background: #F8F9FA;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         /* Doctor Profile Section */
