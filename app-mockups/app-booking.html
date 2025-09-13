@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حجز الموعد - تطبيق دكتور</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00C9A7;
+            --secondary-color: #0E7490;
+            --accent-color: #06B6D4;
+            --light-bg: #F0FDFA;
+            --white: #FFFFFF;
+            --text-dark: #134E4A;
+            --text-gray: #64748B;
+            --border-color: #E5E7EB;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --gradient: linear-gradient(135deg, #00C9A7 0%, #0E7490 100%);
+        }
+
+        body {
+            font-family: -apple-system, 'Segoe UI', Tahoma, sans-serif;
+            background: var(--gradient);
+            min-height: 100vh;
+        }
+
+        /* Demo Navigation Header */
+        .demo-header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .demo-nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .demo-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .demo-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .demo-logo-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .demo-steps {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .step-link {
+            padding: 0.5rem 1rem;
+            background: var(--light-bg);
+            border-radius: 20px;
+            text-decoration: none;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .step-link:hover {
+            background: var(--white);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .step-link.active {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .back-to-landing {
+            padding: 0.5rem 1rem;
+            background: var(--gradient);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            min-height: calc(100vh - 80px);
+            padding: 2rem;
+        }
+
+        /* Mobile Frame */
+        .mobile-container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--white);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            background: var(--white);
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* App Header */
+        .app-header {
+            background: var(--gradient);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 1rem;
+            top: 1rem;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .header-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            padding: 1.5rem;
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: bold;
+            background: var(--border-color);
+            color: var(--text-gray);
+        }
+
+        .step-circle.completed {
+            background: var(--success);
+            color: white;
+        }
+
+        .step-circle.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .step-line {
+            width: 50px;
+            height: 2px;
+            background: var(--border-color);
+        }
+
+        .step-line.completed {
+            background: var(--success);
+        }
+
+        /* App Content */
+        /* .app-content {
+            padding: 1rem;
+            height: calc(600px - 280px);
+            overflow-y: auto;
+            background: #F8F9FA;
+        } */
+         .app-content {
+    width: 400px; /* أو حسب الحجم الذي تريده */
+    max-width: 90%;
+    margin: 0 auto;
+    height: auto; /* اجعله يتكيف مع المحتوى */
+    max-height: 65vh; /* حد أقصى للارتفاع نسبةً إلى ارتفاع النافذة */
+    overflow-y: auto; /* للسماح بالتمرير عند الحاجة */
+    padding: 1rem;
+    background: #F8F9FA;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+        /* Booking Summary Card */
+        .booking-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-icon {
+            color: var(--primary-color);
+        }
+
+        /* Doctor Info */
+        .doctor-info {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--light-bg);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .doctor-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .doctor-details {
+            flex: 1;
+        }
+
+        .doctor-name {
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .doctor-specialty {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .doctor-clinic {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+        }
+
+        /* Appointment Details */
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Patient Form */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 201, 167, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        /* Radio Group */
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .radio-option {
+            flex: 1;
+            position: relative;
+        }
+
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .radio-label {
+            display: block;
+            padding: 0.8rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .radio-option input[type="radio"]:checked + .radio-label {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Payment Summary */
+        .payment-summary {
+            background: var(--light-bg);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .payment-row.total {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Terms Checkbox */
+        .terms-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .terms-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-top: 0.2rem;
+        }
+
+        .terms-text {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            line-height: 1.4;
+        }
+
+        .terms-link {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        /* Bottom Action */
+        .bottom-action {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .confirm-btn {
+            flex: 1;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .confirm-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .confirm-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .cancel-btn {
+            padding: 1rem 2rem;
+            background: white;
+            color: var(--error);
+            border: 2px solid var(--error);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cancel-btn:hover {
+            background: var(--error);
+            color: white;
+        }
+
+        /* Success Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 350px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            animation: scaleIn 0.5s ease;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-message {
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-btn {
+            width: 100%;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .demo-steps {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-container {
+                border-radius: 0;
+                max-width: 100%;
+                height: 100vh;
+            }
+
+            .app-content {
+                height: calc(100vh - 380px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Demo Navigation Header -->
+    <header class="demo-header">
+        <nav class="demo-nav">
+            <a href="../landing/index.html" class="demo-logo">
+                <div class="demo-logo-icon">🏥</div>
+                <div class="demo-logo-text">دكتور - عرض التطبيق</div>
+            </a>
+            
+            <div class="demo-steps">
+                <a href="app-login.html" class="step-link">1. تسجيل الدخول</a>
+                <a href="app-otp.html" class="step-link">2. رمز التحقق</a>
+                <a href="app-location.html" class="step-link">3. الموقع</a>
+                <a href="app-home.html" class="step-link">4. الرئيسية</a>
+                <a href="app-clinic-details.html" class="step-link">5. العيادة</a>
+                <a href="app-doctor-profile.html" class="step-link">6. الطبيب</a>
+                <a href="app-booking.html" class="step-link active">7. الحجز</a>
+                <a href="app-confirmation.html" class="step-link">8. التأكيد</a>
+            </div>
+            
+            <a href="../landing/index.html" class="back-to-landing">↰ رجوع للموقع</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Success Modal -->
+        <div class="modal-overlay" id="successModal">
+            <div class="modal-content">
+                <div class="modal-icon">✓</div>
+                <h3 class="modal-title">تم الحجز بنجاح!</h3>
+                <p class="modal-message">سيتم إرسال تفاصيل الموعد إلى رقم هاتفك المسجل</p>
+                <button class="modal-btn" onclick="goToConfirmation()">عرض تفاصيل الحجز</button>
+            </div>
+        </div>
+
+        <!-- Mobile Container -->
+        <div class="mobile-container">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="status-time">9:41</div>
+                <div class="status-icons">
+                    <span>📶</span>
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+
+            <!-- App Header -->
+            <div class="app-header">
+                <button class="back-button" onclick="window.location.href='app-doctor-profile.html'">
+                    →
+                </button>
+                <div class="header-icon">📅</div>
+                <h1 class="header-title">تأكيد الحجز</h1>
+                <p class="header-subtitle">راجع بياناتك وأكد الموعد</p>
+            </div>
+
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="progress-step">
+                    <div class="step-circle completed">✓</div>
+                    <div class="step-line completed"></div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle active">2</div>
+                    <div class="step-line"></div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle">3</div>
+                </div>
+            </div>
+
+            <!-- App Content -->
+            <div class="app-content">
+                <!-- Appointment Details Card -->
+                <div class="booking-card">
+                    <h3 class="card-title">
+                        <span class="card-icon">📋</span>
+                        تفاصيل الموعد
+                    </h3>
+                    
+                    <!-- Doctor Info -->
+                    <div class="doctor-info">
+                        <div class="doctor-avatar">👨‍⚕️</div>
+                        <div class="doctor-details">
+                            <div class="doctor-name">د. محمد الطرابلسي</div>
+                            <div class="doctor-specialty">أخصائي أمراض القلب</div>
+                            <div class="doctor-clinic">مركز الشفاء الطبي</div>
+                        </div>
+                    </div>
+
+                    <!-- Appointment Details -->
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <span>📅</span>
+                            <span>التاريخ</span>
+                        </div>
+                        <div class="detail-value" id="appointmentDate">15 ديسمبر 2024</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <span>⏰</span>
+                            <span>الوقت</span>
+                        </div>
+                        <div class="detail-value" id="appointmentTime">10:00 صباحاً</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">
+                            <span>📍</span>
+                            <span>الموقع</span>
+                        </div>
+                        <div class="detail-value">شارع الجمهورية، طرابلس</div>
+                    </div>
+                </div>
+
+                <!-- Patient Information Card -->
+                <div class="booking-card">
+                    <h3 class="card-title">
+                        <span class="card-icon">👤</span>
+                        معلومات المريض
+                    </h3>
+                    
+                    <div class="form-group">
+                        <label class="form-label">الاسم الكامل *</label>
+                        <input type="text" class="form-input" placeholder="أدخل اسمك الكامل" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">رقم الهاتف *</label>
+                        <input type="tel" class="form-input" value="+218 91 123 4567" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">العمر *</label>
+                        <input type="number" class="form-input" placeholder="أدخل عمرك" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">الجنس *</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="male" name="gender" checked>
+                                <label for="male" class="radio-label">ذكر</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="female" name="gender">
+                                <label for="female" class="radio-label">أنثى</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">نوع الزيارة</label>
+                        <select class="form-select">
+                            <option>كشف جديد</option>
+                            <option>متابعة</option>
+                            <option>استشارة</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">ملاحظات (اختياري)</label>
+                        <textarea class="form-textarea" placeholder="أضف أي ملاحظات أو أعراض تريد إخبار الطبيب بها..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Payment Summary Card -->
+                <div class="booking-card">
+                    <h3 class="card-title">
+                        <span class="card-icon">💳</span>
+                        ملخص الدفع
+                    </h3>
+                    
+                    <div class="payment-summary">
+                        <div class="payment-row">
+                            <span>رسوم الكشف</span>
+                            <span>50 دينار</span>
+                        </div>
+                        <div class="payment-row">
+                            <span>رسوم الحجز</span>
+                            <span>5 دينار</span>
+                        </div>
+                        <div class="payment-row total">
+                            <span>المجموع</span>
+                            <span>55 دينار</span>
+                        </div>
+                    </div>
+                    
+                    <div class="terms-container">
+                        <input type="checkbox" class="terms-checkbox" id="terms">
+                        <label for="terms" class="terms-text">
+                            أوافق على <a href="#" class="terms-link">الشروط والأحكام</a> و
+                            <a href="#" class="terms-link">سياسة الإلغاء</a>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Spacer for bottom action -->
+                <div style="height: 80px;"></div>
+            </div>
+
+            <!-- Bottom Action -->
+            <div class="bottom-action">
+                <button class="cancel-btn" onclick="cancelBooking()">إلغاء</button>
+                <button class="confirm-btn" id="confirmBtn" onclick="confirmBooking()">تأكيد الحجز</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Load appointment data from localStorage
+        const appointmentData = JSON.parse(localStorage.getItem('selectedAppointment') || '{}');
+        
+        // Display appointment details
+        if (appointmentData.date) {
+            document.getElementById('appointmentDate').textContent = appointmentData.date + ' 2024';
+        }
+        if (appointmentData.time) {
+            document.getElementById('appointmentTime').textContent = appointmentData.time;
+        }
+
+        // Get phone number from localStorage
+        const userPhone = localStorage.getItem('userPhone') || '+218 91 123 4567';
+        document.querySelector('input[type="tel"]').value = userPhone;
+
+        // Form validation
+        const inputs = document.querySelectorAll('.form-input[required]');
+        const termsCheckbox = document.getElementById('terms');
+        const confirmBtn = document.getElementById('confirmBtn');
+
+        function checkFormValidity() {
+            let isValid = true;
+            
+            // Check required inputs
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    isValid = false;
+                }
+            });
+            
+            // Check terms checkbox
+            if (!termsCheckbox.checked) {
+                isValid = false;
+            }
+            
+            // Enable/disable confirm button
+            confirmBtn.disabled = !isValid;
+        }
+
+        // Add event listeners
+        inputs.forEach(input => {
+            input.addEventListener('input', checkFormValidity);
+        });
+        
+        termsCheckbox.addEventListener('change', checkFormValidity);
+
+        // Initial check
+        checkFormValidity();
+
+        // Confirm booking
+        function confirmBooking() {
+            if (confirmBtn.disabled) return;
+            
+            // Get form data
+            const formData = {
+                patientName: document.querySelector('.form-input').value,
+                age: document.querySelectorAll('.form-input')[2].value,
+                gender: document.querySelector('input[name="gender"]:checked').id,
+                visitType: document.querySelector('.form-select').value,
+                notes: document.querySelector('.form-textarea').value,
+                ...appointmentData
+            };
+            
+            // Save booking data
+            localStorage.setItem('confirmedBooking', JSON.stringify(formData));
+            
+            // Show success modal
+            document.getElementById('successModal').classList.add('show');
+        }
+
+        // Cancel booking
+        function cancelBooking() {
+            if (confirm('هل أنت متأكد من إلغاء الحجز؟')) {
+                window.location.href = 'app-doctor-profile.html';
+            }
+        }
+
+        // Go to confirmation page
+        function goToConfirmation() {
+            window.location.href = 'app-confirmation.html';
+        }
+
+        // Handle terms links
+        document.querySelectorAll('.terms-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('عرض ' + e.target.textContent);
+            });
+        });
+    </script>
+</body>
+</html>
