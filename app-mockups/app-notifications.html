@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دكتور - الإشعارات</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #00bfa5 0%, #48d1aa 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Main Container */
+        .app-container {
+            width: 380px;
+            background: #f5f5f5;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        /* Phone Header */
+        .phone-header {
+            background: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .time {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 5px;
+            font-size: 14px;
+        }
+
+        /* App Header */
+        .app-header {
+            background: #00bfa5;
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .header-title {
+            flex: 1;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .mark-all-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+
+        .mark-all-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            background: white;
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            white-space: nowrap;
+            border-bottom: 1px solid #eee;
+        }
+
+        .filter-tab {
+            padding: 8px 16px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .filter-tab.active {
+            background: #00bfa5;
+            color: white;
+        }
+
+        .tab-badge {
+            background: rgba(255,255,255,0.3);
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 11px;
+            margin-right: 5px;
+        }
+
+        /* Notifications Container */
+        .notifications-container {
+            padding: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* Date Header */
+        .date-header {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        /* Notification Card */
+        .notification-card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-card.unread {
+            background: #f0fffe;
+            border-right: 3px solid #00bfa5;
+        }
+
+        .notification-card:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .notification-content {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Notification Icon */
+        .notification-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .icon-appointment {
+            background: #e3f2fd;
+            color: #2196f3;
+        }
+
+        .icon-reminder {
+            background: #fff3e0;
+            color: #ff9800;
+        }
+
+        .icon-success {
+            background: #e8f5e9;
+            color: #4caf50;
+        }
+
+        .icon-cancel {
+            background: #ffebee;
+            color: #f44336;
+        }
+
+        .icon-offer {
+            background: #f3e5f5;
+            color: #9c27b0;
+        }
+
+        .icon-system {
+            background: #e0f2f1;
+            color: #009688;
+        }
+
+        /* Notification Details */
+        .notification-details {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .notification-message {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+
+        .notification-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .notification-time {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        /* Action Button */
+        .notification-action {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #f5f5f5;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: 1px solid #00bfa5;
+            color: #00bfa5;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #00bfa5;
+            color: white;
+        }
+
+        /* New Badge */
+        .new-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #ff4444;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .empty-description {
+            font-size: 14px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            background: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #eee;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: #999;
+            font-size: 12px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav-item.active {
+            color: #00bfa5;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Phone Status Bar -->
+        <div class="phone-header">
+            <div class="time">9:41</div>
+            <div class="status-icons">
+                <span>📶</span>
+                <span>📶</span>
+                <span>🔋</span>
+            </div>
+        </div>
+
+        <!-- App Header -->
+        <div class="app-header">
+            <button class="back-btn" onclick="window.location.href='app-home.html'">
+                        →
+                    </button>
+            <h2 class="header-title">الإشعارات</h2>
+            <button class="mark-all-btn">
+                <span>✓</span>
+                <span>قراءة الكل</span>
+            </button>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="filter-tab active">
+                الكل
+                <span class="tab-badge">7</span>
+            </button>
+            <button class="filter-tab">
+                غير مقروءة
+                <span class="tab-badge">3</span>
+            </button>
+            <button class="filter-tab">المواعيد</button>
+            <button class="filter-tab">العروض</button>
+            <button class="filter-tab">النظام</button>
+        </div>
+
+        <!-- Notifications List -->
+        <div class="notifications-container">
+            <!-- Today -->
+            <div class="date-header">اليوم</div>
+
+            <!-- Unread Notification -->
+            <div class="notification-card unread">
+                <span class="new-badge">جديد</span>
+                <div class="notification-content">
+                    <div class="notification-icon icon-reminder">⏰</div>
+                    <div class="notification-details">
+                        <div class="notification-title">تذكير بموعدك غداً</div>
+                        <div class="notification-message">
+                            لديك موعد غداً مع د. محمد الطرابلسي في مركز الشفاء الطبي الساعة 10:00 صباحاً
+                        </div>
+                        <div class="notification-meta">
+                            <span class="notification-time">🕐 منذ 5 دقائق</span>
+                        </div>
+                        <div class="notification-action">
+                            <button class="action-btn">عرض التفاصيل</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unread Notification -->
+            <div class="notification-card unread">
+                <span class="new-badge">جديد</span>
+                <div class="notification-content">
+                    <div class="notification-icon icon-offer">🎁</div>
+                    <div class="notification-details">
+                        <div class="notification-title">عرض خاص من عيادة الابتسامة</div>
+                        <div class="notification-message">
+                            احصل على خصم 30% على تنظيف الأسنان هذا الأسبوع. العرض ساري حتى 20 ديسمبر
+                        </div>
+                        <div class="notification-meta">
+                            <span class="notification-time">🕐 منذ ساعة</span>
+                        </div>
+                        <div class="notification-action">
+                            <button class="action-btn">عرض العرض</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unread Notification -->
+            <div class="notification-card unread">
+                <div class="notification-content">
+                    <div class="notification-icon icon-success">✅</div>
+                    <div class="notification-details">
+                        <div class="notification-title">تم تأكيد موعدك بنجاح</div>
+                        <div class="notification-message">
+                            تم تأكيد حجزك مع د. فاطمة بنغازي يوم الأحد 16 ديسمبر الساعة 2:30 مساءً
+                        </div>
+                        <div class="notification-meta">
+                            <span class="notification-time">🕐 منذ 3 ساعات</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Yesterday -->
+            <div class="date-header">أمس</div>
+
+            <!-- Read Notification -->
+            <div class="notification-card">
+                <div class="notification-content">
+                    <div class="notification-icon icon-appointment">📋</div>
+                    <div class="notification-details">
+                        <div class="notification-title">نتائج التحاليل جاهزة</div>
+                        <div class="notification-message">
+                            نتائج تحاليلك الطبية جاهزة الآن. يمكنك استلامها من مختبر الشفاء أو عرضها إلكترونياً
+                        </div>
+                        <div class="notification-meta">
+                            <span class="notification-time">🕐 أمس 4:30 م</span>
+                        </div>
+                        <div class="notification-action">
+                            <button class="action-btn">عرض النتائج</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Read Notification -->
+            <div class="notification-card">
+                <div class="notification-content">
+                    <div class="notification-icon icon-system">📱</div>
+                    <div class="notification-details">
+                        <div class="notification-title">تحديث جديد للتطبيق</div>
+                        <div class="notification-message">
+                            تم إضافة ميزة الدردشة المباشرة مع الطبيب وتحسينات في الأداء
+                        </div>
+                        <div class="notification-meta">
+                            <span class="notification-time">🕐 أمس 10:00 ص</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- This Week -->
+            <div class="date-header">هذا الأسبوع</div>
+
+            <!-- Read Notification -->
+            <div class="notification-card">
+                <div class="notification-content">
+                    <div class="notification-icon icon-cancel">❌</div>
+                    <div class="notification-details">
+                        <div class="notification-title">تم إلغاء الموعد</div>
+                        <div class="notification-message">
+                            نأسف، تم إلغاء موعدك مع د. أحمد الصديق بسبب ظرف طارئ. يرجى إعادة الحجز
+                        </div>
+                        <div class="notification-meta">
+                            <span class="notification-time">🕐 الإثنين 11:30 ص</span>
+                        </div>
+                        <div class="notification-action">
+                            <button class="action-btn">إعادة الحجز</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Read Notification -->
+            <div class="notification-card">
+                <div class="notification-content">
+                    <div class="notification-icon icon-appointment">⭐</div>
+                    <div class="notification-details">
+                        <div class="notification-title">قيّم زيارتك الأخيرة</div>
+                        <div class="notification-message">
+                            كيف كانت تجربتك مع د. خالد مصطفى؟ شارك رأيك لمساعدة الآخرين
+                        </div>
+                        <div class="notification-meta">
+                            <span class="notification-time">🕐 الأحد 2:00 م</span>
+                        </div>
+                        <div class="notification-action">
+                            <button class="action-btn">تقييم الآن</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+                <div class="nav-item" onclick="location.href='app-home.html'">
+                    <div class="icon">🏠</div>
+                    <div class="label">الرئيسية</div>
+                </div>
+                <div class="nav-item" onclick="location.href='app-appointments-history.html'">
+                    <div class="icon">📅</div>
+                    <div class="label">مواعيدي</div>
+                </div>
+                <div class="nav-item" onclick="location.href='app-search.html'">
+                    <div class="icon">🔍</div>
+                    <div class="label">بحث</div>
+                </div>
+                <div class="nav-item active" onclick="location.href='app-user-profile.html'">
+                    <div class="icon">👤</div>
+                    <div class="label">حسابي</div>
+                </div>
+        </div>
+    </div>
+</body>
+</html>

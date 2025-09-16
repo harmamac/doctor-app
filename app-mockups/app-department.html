@@ -93,21 +93,25 @@
         }
 
         .back-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
+  width: 40px; /* يمكنك تعديل الحجم حسب الرغبة */
+  height: 40px;
+  background: var(--light-bg); /* استخدم متغير اللون الخاص بك أو لون ثابت مثل #fff */
+  border: none;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem; /* حجم السهم */
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: bold; /* إذا أردت أن يكون السهم أكثر وضوحًا */
+}
 
-        .back-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
+/* عند تمرير الماوس على الزر */
+.back-btn:hover {
+  background: var(--primary-color); /* استخدم لونك المفضل هنا */
+  color: white; /* لون النص عند التمرير */
+}
 
         .header-info {
             flex: 1;
@@ -202,6 +206,12 @@
             align-items: center;
             gap: 15px;
         }
+
+        .doctor-card-link {
+            display: block;
+            text-decoration: none;
+            color: inherit; /* للحفاظ على لون النص كما هو */
+            }
 
         .doctor-card:hover {
             transform: translateY(-2px);
@@ -339,7 +349,7 @@
 
         <!-- App Header -->
         <div class="app-header">
-            <button class="back-btn">→</button>
+            <button class="back-btn" onclick="window.location.href='app-clinic-details.html'">→</button>
             <div class="header-info">
                 <h2>قسم القلب</h2>
                 <p>مركز الشفاء الطبي</p>
@@ -366,19 +376,21 @@
         <!-- Doctors List -->
         <div class="doctors-list">
             <!-- Doctor 1 -->
-            <div class="doctor-card">
-                <div class="doctor-avatar">👨‍⚕️</div>
-                <div class="doctor-info">
-                    <div class="doctor-name">د. أحمد محمد الطرابلسي</div>
-                    <div class="doctor-specialty">استشاري أمراض القلب والأوعية الدموية</div>
-                    <div class="doctor-meta">
-                        <span class="meta-item">🎓 15 سنة</span>
-                        <span class="meta-item rating">⭐ 4.9</span>
-                        <span class="meta-item">💰 150 د.ل</span>
-                    </div>
-                </div>
-                <div class="availability-badge">متاح</div>
-            </div>
+            <a href="app-doctor-profile.html" class="doctor-card-link">
+  <div class="doctor-card">
+    <div class="doctor-avatar">👨‍⚕️</div>
+    <div class="doctor-info">
+      <div class="doctor-name">د. أحمد محمد الطرابلسي</div>
+      <div class="doctor-specialty">استشاري أمراض القلب والأوعية الدموية</div>
+      <div class="doctor-meta">
+        <span class="meta-item">🎓 15 سنة</span>
+        <span class="meta-item rating">⭐ 4.9</span>
+        <span class="meta-item">💰 150 د.ل</span>
+      </div>
+    </div>
+    <div class="availability-badge">متاح</div>
+  </div>
+</a>
 
             <!-- Doctor 2 -->
             <div class="doctor-card">
