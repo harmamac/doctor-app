@@ -1,0 +1,413 @@
+/* ================================
+   Main CSS - تطبيق دكتور
+   Main Stylesheet that imports all CSS files
+   ================================ */
+
+/* ===== Import Base Styles ===== */
+@import url('reset.css');
+@import url('variables.css');
+
+/* ===== Import Arabic Font from Google Fonts ===== */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap');
+
+/* ================================
+   Global Styles
+   ================================ */
+
+/* ===== App Container ===== */
+.app-container {
+  width: var(--app-width);
+  margin: 0 auto;
+  background: var(--background-secondary);
+  border-radius: var(--radius-app);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+  position: relative;
+}
+
+/* ===== Phone Status Bar ===== */
+.phone-header {
+  background: var(--background-primary);
+  padding: var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  height: var(--status-bar-height);
+}
+
+.time {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+}
+
+.status-icons {
+  display: flex;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-base);
+}
+
+/* ===== App Header ===== */
+.app-header {
+  background: var(--primary-color);
+  color: var(--text-white);
+  padding: var(--spacing-lg);
+  min-height: var(--header-height);
+}
+
+/* ===== Progress Bar ===== */
+.progress-container {
+  background: var(--background-primary);
+  border-radius: var(--radius-xxl);
+  padding: var(--spacing-md) var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+  box-shadow: var(--shadow-md);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--text-light);
+  font-size: var(--font-size-base);
+  transition: var(--transition-normal);
+}
+
+.step.active {
+  background: var(--primary-color);
+  color: var(--text-white);
+  padding: 8px 16px;
+  border-radius: var(--radius-lg);
+}
+
+.step.completed {
+  color: var(--primary-color);
+}
+
+/* ===== Buttons ===== */
+.btn {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: var(--transition-normal);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: var(--text-white);
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+  background: var(--background-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-dark);
+}
+
+.btn-secondary:hover {
+  background: var(--background-tertiary);
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
+}
+
+.btn-danger:hover {
+  background: var(--danger-color);
+  color: var(--text-white);
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.btn-icon {
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  border-radius: var(--radius-full);
+}
+
+/* ===== Cards ===== */
+.card {
+  background: var(--background-primary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-normal);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.card-body {
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+}
+
+.card-footer {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-light);
+}
+
+/* ===== Forms ===== */
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+.form-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
+  transition: var(--transition-fast);
+  background: var(--background-primary);
+}
+
+.form-input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 191, 165, 0.1);
+}
+
+.form-input::placeholder {
+  color: var(--text-light);
+  opacity: 1;
+}
+
+/* ===== Bottom Navigation ===== */
+.bottom-nav {
+  background: var(--background-primary);
+  padding: var(--spacing-md);
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid var(--border-color);
+  height: var(--nav-height);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--text-light);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.nav-item.active {
+  color: var(--primary-color);
+}
+
+.nav-item:hover {
+  color: var(--primary-color);
+}
+
+.nav-icon {
+  font-size: 20px;
+}
+
+/* ===== Badges ===== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}
+
+.badge-primary {
+  background: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.badge-danger {
+  background: var(--danger-color);
+  color: var(--text-white);
+}
+
+.badge-warning {
+  background: var(--warning-color);
+  color: var(--text-white);
+}
+
+.badge-success {
+  background: var(--success-color);
+  color: var(--text-white);
+}
+
+/* ===== Utility Classes ===== */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+
+.p-sm { padding: var(--spacing-sm); }
+.p-md { padding: var(--spacing-md); }
+.p-lg { padding: var(--spacing-lg); }
+
+.flex { display: flex; }
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gap-sm { gap: var(--spacing-sm); }
+.gap-md { gap: var(--spacing-md); }
+.gap-lg { gap: var(--spacing-lg); }
+
+/* ===== Animations ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 191, 165, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 191, 165, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 191, 165, 0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn var(--animation-normal) ease-out;
+}
+
+.animate-slideInRight {
+  animation: slideInRight var(--animation-normal) ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 480px) {
+  body {
+    padding: 0;
+  }
+  
+  .app-container {
+    width: 100%;
+    border-radius: 0;
+  }
+  
+  .progress-container {
+    display: none; /* Hide on mobile */
+  }
+}
+
+@media (min-width: 768px) {
+  .app-container {
+    margin: 20px auto;
+  }
+}
+
+/* ===== Loading Spinner ===== */
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(0, 191, 165, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== RTL Specific Adjustments ===== */
+[dir="rtl"] .nav-item {
+  direction: rtl;
+}
+
+[dir="rtl"] .card-header {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .btn {
+  flex-direction: row-reverse;
+}

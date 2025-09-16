@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دكتور - قسم الأطباء</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #00bfa5 0%, #48d1aa 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: white;
+            border-radius: 30px;
+            padding: 15px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .step.active {
+            background: #00bfa5;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        .step.completed {
+            color: #00bfa5;
+        }
+
+        /* Main Container */
+        .app-container {
+            width: 380px;
+            background: #f5f5f5;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        /* Phone Header */
+        .phone-header {
+            background: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .time {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 5px;
+            font-size: 14px;
+        }
+
+        /* App Header */
+        .app-header {
+            background: #00bfa5;
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .header-info {
+            flex: 1;
+        }
+
+        .header-info h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .header-info p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Department Info */
+        .department-header {
+            background: white;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .department-icon {
+            width: 60px;
+            height: 60px;
+            background: #e8f5f3;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .department-details h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .department-details p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 0 20px;
+            margin-bottom: 20px;
+        }
+
+        .filter-tab {
+            flex: 1;
+            padding: 10px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .filter-tab.active {
+            background: #00bfa5;
+            color: white;
+            border-color: #00bfa5;
+        }
+
+        /* Doctors List */
+        .doctors-list {
+            padding: 0 20px 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .doctor-card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .doctor-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00bfa5, #00a693);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .doctor-info {
+            flex: 1;
+        }
+
+        .doctor-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .doctor-specialty {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .doctor-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .rating {
+            color: #ffa500;
+        }
+
+        .availability-badge {
+            background: #e8f5f3;
+            color: #00bfa5;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .availability-badge.busy {
+            background: #fff3e0;
+            color: #ff9800;
+        }
+
+        /* User Profile Icon */
+        .user-profile {
+            width: 40px;
+            height: 40px;
+            background: #00bfa5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            background: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #eee;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: #999;
+            font-size: 12px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav-item.active {
+            color: #00bfa5;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="step completed">1. تسجيل الدخول ✓</div>
+        <div class="step completed">2. رمز التحقق ✓</div>
+        <div class="step completed">3. الموقع ✓</div>
+        <div class="step completed">4. الرئيسية ✓</div>
+        <div class="step completed">5. العيادة ✓</div>
+        <div class="step active">6. القسم</div>
+        <div class="step">7. الطبيب</div>
+        <div class="step">8. الحجز</div>
+        <div class="step">9. التأكيد</div>
+    </div>
+
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Phone Status Bar -->
+        <div class="phone-header">
+            <div class="time">9:41</div>
+            <div class="status-icons">
+                <span>📶</span>
+                <span>📶</span>
+                <span>🔋</span>
+            </div>
+        </div>
+
+        <!-- App Header -->
+        <div class="app-header">
+            <button class="back-btn">→</button>
+            <div class="header-info">
+                <h2>قسم القلب</h2>
+                <p>مركز الشفاء الطبي</p>
+            </div>
+            <div class="user-profile">👤</div>
+        </div>
+
+        <!-- Department Info -->
+        <div class="department-header">
+            <div class="department-icon">❤️</div>
+            <div class="department-details">
+                <h3>قسم أمراض القلب</h3>
+                <p>12 طبيب متخصص • مفتوح الآن</p>
+            </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <div class="filter-tab active">الكل</div>
+            <div class="filter-tab">متاح اليوم</div>
+            <div class="filter-tab">الأعلى تقييماً</div>
+        </div>
+
+        <!-- Doctors List -->
+        <div class="doctors-list">
+            <!-- Doctor 1 -->
+            <div class="doctor-card">
+                <div class="doctor-avatar">👨‍⚕️</div>
+                <div class="doctor-info">
+                    <div class="doctor-name">د. أحمد محمد الطرابلسي</div>
+                    <div class="doctor-specialty">استشاري أمراض القلب والأوعية الدموية</div>
+                    <div class="doctor-meta">
+                        <span class="meta-item">🎓 15 سنة</span>
+                        <span class="meta-item rating">⭐ 4.9</span>
+                        <span class="meta-item">💰 150 د.ل</span>
+                    </div>
+                </div>
+                <div class="availability-badge">متاح</div>
+            </div>
+
+            <!-- Doctor 2 -->
+            <div class="doctor-card">
+                <div class="doctor-avatar">👩‍⚕️</div>
+                <div class="doctor-info">
+                    <div class="doctor-name">د. فاطمة علي بنغازي</div>
+                    <div class="doctor-specialty">أخصائية قسطرة القلب</div>
+                    <div class="doctor-meta">
+                        <span class="meta-item">🎓 12 سنة</span>
+                        <span class="meta-item rating">⭐ 4.8</span>
+                        <span class="meta-item">💰 120 د.ل</span>
+                    </div>
+                </div>
+                <div class="availability-badge busy">مشغول</div>
+            </div>
+
+            <!-- Doctor 3 -->
+            <div class="doctor-card">
+                <div class="doctor-avatar">👨‍⚕️</div>
+                <div class="doctor-info">
+                    <div class="doctor-name">د. محمد سالم الفيتوري</div>
+                    <div class="doctor-specialty">استشاري جراحة القلب</div>
+                    <div class="doctor-meta">
+                        <span class="meta-item">🎓 20 سنة</span>
+                        <span class="meta-item rating">⭐ 5.0</span>
+                        <span class="meta-item">💰 200 د.ل</span>
+                    </div>
+                </div>
+                <div class="availability-badge">متاح</div>
+            </div>
+
+            <!-- Doctor 4 -->
+            <div class="doctor-card">
+                <div class="doctor-avatar">👩‍⚕️</div>
+                <div class="doctor-info">
+                    <div class="doctor-name">د. عائشة أحمد الصديق</div>
+                    <div class="doctor-specialty">أخصائية أمراض القلب للأطفال</div>
+                    <div class="doctor-meta">
+                        <span class="meta-item">🎓 8 سنوات</span>
+                        <span class="meta-item rating">⭐ 4.7</span>
+                        <span class="meta-item">💰 100 د.ل</span>
+                    </div>
+                </div>
+                <div class="availability-badge">متاح</div>
+            </div>
+
+            <!-- Doctor 5 -->
+            <div class="doctor-card">
+                <div class="doctor-avatar">👨‍⚕️</div>
+                <div class="doctor-info">
+                    <div class="doctor-name">د. خالد مصطفى الزروق</div>
+                    <div class="doctor-specialty">استشاري أمراض الضغط</div>
+                    <div class="doctor-meta">
+                        <span class="meta-item">🎓 18 سنة</span>
+                        <span class="meta-item rating">⭐ 4.6</span>
+                        <span class="meta-item">💰 140 د.ل</span>
+                    </div>
+                </div>
+                <div class="availability-badge busy">مشغول</div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+  <div class="nav-item" onclick="location.href='app-home.html'">
+    <div class="icon">🏠</div>
+    <div class="label">الرئيسية</div>
+  </div>
+  <div class="nav-item" onclick="location.href='app-appointments-history.html'">
+    <div class="icon">📅</div>
+    <div class="label">مواعيدي</div>
+  </div>
+  <div class="nav-item" onclick="location.href='app-search.html'">
+    <div class="icon">🔍</div>
+    <div class="label">بحث</div>
+  </div>
+  <div class="nav-item active" onclick="location.href='app-user-profile.html'">
+    <div class="icon">👤</div>
+    <div class="label">حسابي</div>
+  </div>
+</div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>البحث - تطبيق دكتور</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #00C9A7;
+            --secondary-color: #0E7490;
+            --accent-color: #06B6D4;
+            --light-bg: #F0FDFA;
+            --white: #FFFFFF;
+            --text-dark: #134E4A;
+            --text-gray: #64748B;
+            --border-color: #E5E7EB;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --gradient: linear-gradient(135deg, #00C9A7 0%, #0E7490 100%);
+        }
+
+        body {
+            font-family: -apple-system, 'Segoe UI', Tahoma, sans-serif;
+            background: var(--light-bg);
+            min-height: 100vh;
+        }
+
+        /* Demo Navigation Header */
+        .demo-header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .demo-nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .demo-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .demo-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .demo-note {
+            background: var(--warning);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .back-to-landing {
+            padding: 0.5rem 1rem;
+            background: var(--gradient);
+            color: white;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            min-height: calc(100vh - 80px);
+            padding: 2rem;
+        }
+
+        /* Mobile Frame */
+        .mobile-container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--white);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            background: var(--white);
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* App Header */
+        .app-header {
+            background: white;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .back-button {
+            width: 40px;
+            height: 40px;
+            background: var(--light-bg);
+            border: none;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-button:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-gray);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.8rem 3rem 0.8rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 201, 167, 0.1);
+        }
+
+        .filter-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border: none;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .filter-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .filter-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            background: var(--error);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        /* Location Bar */
+        .location-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--light-bg);
+            border-radius: 10px;
+        }
+
+        .location-text {
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .change-location {
+            color: var(--primary-color);
+            font-size: 0.85rem;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Search Tabs */
+        .search-tabs {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-chip {
+            padding: 0.6rem 1.2rem;
+            background: var(--light-bg);
+            border-radius: 20px;
+            border: 2px solid transparent;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-chip:hover {
+            border-color: var(--primary-color);
+        }
+
+        .tab-chip.active {
+            background: var(--gradient);
+            color: white;
+        }
+
+        /* Quick Filters */
+        .quick-filters {
+            padding: 1rem;
+            background: white;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .filter-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-gray);
+            margin-bottom: 0.8rem;
+        }
+
+        .filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .filter-chip {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .filter-chip:hover {
+            background: var(--light-bg);
+        }
+
+        .filter-chip.selected {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .filter-chip-icon {
+            font-size: 1rem;
+        }
+
+        /* App Content */
+        .app-content {
+            height: calc(600px - 320px);
+            overflow-y: auto;
+            background: #F8F9FA;
+            padding: 1rem;
+        }
+
+        /* Results Header */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .results-count {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+        }
+
+        .results-count strong {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .sort-dropdown {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        /* Search Results */
+        .search-results {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .result-header {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .result-image {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .result-info {
+            flex: 1;
+        }
+
+        .result-name {
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 0.2rem;
+        }
+
+        .result-specialty {
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .result-clinic {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+        }
+
+        .result-details {
+            display: flex;
+            gap: 1rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .result-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.85rem;
+            color: var(--text-gray);
+        }
+
+        .result-rating {
+            margin-right: auto;
+            color: var(--warning);
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .no-results-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .no-results-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .no-results-text {
+            color: var(--text-gray);
+        }
+
+        /* Filter Modal */
+        .filter-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .filter-modal.show {
+            display: flex;
+        }
+
+        .filter-content {
+            background: white;
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+            max-width: 400px;
+            max-height: 70vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .filter-modal-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        .close-filter {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-gray);
+        }
+
+        .filter-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .filter-section-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .filter-checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary-color);
+        }
+
+        .filter-label {
+            flex: 1;
+            color: var(--text-dark);
+        }
+
+        .filter-count {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+        }
+
+        .filter-actions {
+            padding: 1rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .reset-filters {
+            flex: 1;
+            padding: 0.8rem;
+            background: white;
+            color: var(--text-dark);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .apply-filters {
+            flex: 2;
+            padding: 0.8rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            background: white;
+            border-top: 1px solid var(--border-color);
+            padding: 0.5rem;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            padding: 0.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text-gray);
+            font-size: 0.75rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: var(--light-bg);
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .mobile-container {
+                border-radius: 0;
+                max-width: 100%;
+                height: 100vh;
+            }
+
+            .app-content {
+                height: calc(100vh - 420px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Demo Navigation Header -->
+    <header class="demo-header">
+        <nav class="demo-nav">
+            <a href="../landing/index.html" class="demo-logo">
+                <div class="demo-logo-icon">🏥</div>
+                <div>دكتور - عرض التطبيق</div>
+            </a>
+            
+            <div class="demo-note">صفحة البحث والفلترة</div>
+            
+            <a href="../landing/index.html" class="back-to-landing">↰ رجوع للموقع</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Filter Modal -->
+        <div class="filter-modal" id="filterModal">
+            <div class="filter-content">
+                <div class="filter-header">
+                    <h3 class="filter-modal-title">الفلاتر</h3>
+                    <button class="close-filter" onclick="closeFilters()">✕</button>
+                </div>
+                
+                <div class="filter-section">
+                    <h4 class="filter-section-title">التخصص</h4>
+                    <div class="filter-options">
+                        <label class="filter-option">
+                            <input type="checkbox" class="filter-checkbox">
+                            <span class="filter-label">قلب</span>
+                            <span class="filter-count">(23)</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" class="filter-checkbox" checked>
+                            <span class="filter-label">أطفال</span>
+                            <span class="filter-count">(18)</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" class="filter-checkbox">
+                            <span class="filter-label">أسنان</span>
+                            <span class="filter-count">(45)</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" class="filter-checkbox">
+                            <span class="filter-label">عيون</span>
+                            <span class="filter-count">(12)</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h4 class="filter-section-title">المسافة</h4>
+                    <div class="filter-options">
+                        <label class="filter-option">
+                            <input type="radio" name="distance" class="filter-checkbox">
+                            <span class="filter-label">أقل من 1 كم</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="distance" class="filter-checkbox" checked>
+                            <span class="filter-label">1-5 كم</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="distance" class="filter-checkbox">
+                            <span class="filter-label">5-10 كم</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="distance" class="filter-checkbox">
+                            <span class="filter-label">أكثر من 10 كم</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h4 class="filter-section-title">التقييم</h4>
+                    <div class="filter-options">
+                        <label class="filter-option">
+                            <input type="checkbox" class="filter-checkbox">
+                            <span class="filter-label">⭐⭐⭐⭐⭐ 5 نجوم</span>
+                            <span class="filter-count">(8)</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" class="filter-checkbox">
+                            <span class="filter-label">⭐⭐⭐⭐ 4 نجوم فأكثر</span>
+                            <span class="filter-count">(24)</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="checkbox" class="filter-checkbox">
+                            <span class="filter-label">⭐⭐⭐ 3 نجوم فأكثر</span>
+                            <span class="filter-count">(35)</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="filter-actions">
+                    <button class="reset-filters" onclick="resetFilters()">إعادة تعيين</button>
+                    <button class="apply-filters" onclick="applyFilters()">تطبيق الفلاتر</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Container -->
+        <div class="mobile-container">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <div class="status-time">9:41</div>
+                <div class="status-icons">
+                    <span>📶</span>
+                    <span>📶</span>
+                    <span>🔋</span>
+                </div>
+            </div>
+
+            <!-- App Header -->
+            <div class="app-header">
+                <div class="header-top">
+                    <button class="back-button" onclick="window.location.href='app-home.html'">
+                        →
+                    </button>
+                    <div class="search-input-wrapper">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" 
+                               class="search-input" 
+                               placeholder="ابحث عن طبيب، عيادة، أو تخصص..."
+                               id="searchInput"
+                               value="أطفال">
+                    </div>
+                    <button class="filter-btn" onclick="openFilters()">
+                        ⚙️
+                        <span class="filter-badge">2</span>
+                    </button>
+                </div>
+                
+                <div class="location-bar">
+                    <span>📍</span>
+                    <span class="location-text">البحث في: طرابلس</span>
+                    <a href="#" class="change-location">تغيير</a>
+                </div>
+            </div>
+
+            <!-- Search Tabs -->
+            <div class="search-tabs">
+                <div class="tab-chip active">الكل</div>
+                <div class="tab-chip">أطباء</div>
+                <div class="tab-chip">عيادات</div>
+                <div class="tab-chip">مستشفيات</div>
+            </div>
+
+            <!-- Quick Filters -->
+            <div class="quick-filters">
+                <div class="filter-title">فلترة سريعة</div>
+                <div class="filter-chips">
+                    <div class="filter-chip selected">
+                        <span class="filter-chip-icon">⚡</span>
+                        <span>متاح الآن</span>
+                    </div>
+                    <div class="filter-chip">
+                        <span class="filter-chip-icon">📅</span>
+                        <span>اليوم</span>
+                    </div>
+                    <div class="filter-chip">
+                        <span class="filter-chip-icon">⭐</span>
+                        <span>الأعلى تقييماً</span>
+                    </div>
+                    <div class="filter-chip">
+                        <span class="filter-chip-icon">📍</span>
+                        <span>الأقرب</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- App Content -->
+            <div class="app-content">
+                <!-- Results Header -->
+                <div class="results-header">
+                    <div class="results-count">
+                        تم العثور على <strong>12 نتيجة</strong> لـ "أطفال"
+                    </div>
+                    <select class="sort-dropdown">
+                        <option>الأقرب</option>
+                        <option>الأعلى تقييماً</option>
+                        <option>السعر: الأقل</option>
+                        <option>السعر: الأعلى</option>
+                    </select>
+                </div>
+
+                <!-- Search Results -->
+                <div class="search-results">
+                    <!-- Result 1 -->
+                    <a href="app-doctor-profile.html" class="result-card">
+                        <div class="result-header">
+                            <div class="result-image">👨‍⚕️</div>
+                            <div class="result-info">
+                                <div class="result-name">د. أحمد الليبي</div>
+                                <div class="result-specialty">أخصائي طب الأطفال</div>
+                                <div class="result-clinic">عيادة الأطفال التخصصية</div>
+                            </div>
+                        </div>
+                        <div class="result-details">
+                            <div class="result-detail">
+                                <span>📍</span>
+                                <span>4.0 كم</span>
+                            </div>
+                            <div class="result-detail">
+                                <span>💰</span>
+                                <span>45 دينار</span>
+                            </div>
+                            <div class="result-detail">
+                                <span>⏰</span>
+                                <span>غداً</span>
+                            </div>
+                            <div class="result-detail result-rating">
+                                <span>⭐ 4.6</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Result 2 -->
+                    <a href="app-doctor-profile.html" class="result-card">
+                        <div class="result-header">
+                            <div class="result-image">👩‍⚕️</div>
+                            <div class="result-info">
+                                <div class="result-name">د. فاطمة بنغازي</div>
+                                <div class="result-specialty">استشارية طب الأطفال وحديثي الولادة</div>
+                                <div class="result-clinic">مركز الشفاء الطبي</div>
+                            </div>
+                        </div>
+                        <div class="result-details">
+                            <div class="result-detail">
+                                <span>📍</span>
+                                <span>2.5 كم</span>
+                            </div>
+                            <div class="result-detail">
+                                <span>💰</span>
+                                <span>60 دينار</span>
+                            </div>
+                            <div class="result-detail">
+                                <span>⏰</span>
+                                <span>2:00 م</span>
+                            </div>
+                            <div class="result-detail result-rating">
+                                <span>⭐ 4.8</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Result 3 - Clinic -->
+                    <a href="app-clinic-details.html" class="result-card">
+                        <div class="result-header">
+                            <div class="result-image">🏥</div>
+                            <div class="result-info">
+                                <div class="result-name">مركز طرابلس لطب الأطفال</div>
+                                <div class="result-specialty">مركز متخصص</div>
+                                <div class="result-clinic">8 أطباء أطفال</div>
+                            </div>
+                        </div>
+                        <div class="result-details">
+                            <div class="result-detail">
+                                <span>📍</span>
+                                <span>3.1 كم</span>
+                            </div>
+                            <div class="result-detail">
+                                <span>⏰</span>
+                                <span>8ص - 10م</span>
+                            </div>
+                            <div class="result-detail">
+                                <span>📞</span>
+                                <span>متاح</span>
+                            </div>
+                            <div class="result-detail result-rating">
+                                <span>⭐ 4.7</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Result 4 -->
+                    <a href="app-doctor-profile.html" class="result-card">
+                        <div class="result-header">
+                            <div class="result-image">👨‍⚕️</div>
+                            <div class="result-info">
+                                <div class="result-name">د. خالد مصراتة</div>
+                                <div class="result-specialty">أخصائي طب الأطفال والحساسية</div>
+                                <div class="result-clinic">العيادة الحديثة</div>
+                            </div>
+                        </div>
+                        <div class="result-details">
+                            <div class="result-detail">
+                                <span>📍</span>
+                                <span>1.2 كم</span>
+                            </div>
+                            <div class="result-detail">
+                                <span>💰</span>
+                                <span>40 دينار</span>
+                            </div>
+                            <div class="result-detail">
+                                <span>⏰</span>
+                                <span>متاح الآن</span>
+                            </div>
+                            <div class="result-detail result-rating">
+                                <span>⭐ 4.9</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- No Results State (hidden by default) -->
+                <div class="no-results" style="display: none;">
+                    <div class="no-results-icon">🔍</div>
+                    <h3 class="no-results-title">لا توجد نتائج</h3>
+                    <p class="no-results-text">حاول تغيير كلمات البحث أو الفلاتر</p>
+                </div>
+            </div>
+
+            <!-- Bottom Navigation -->
+            <div class="bottom-nav">
+  <div class="nav-item" onclick="location.href='app-home.html'">
+    <div class="icon">🏠</div>
+    <div class="label">الرئيسية</div>
+  </div>
+  <div class="nav-item" onclick="location.href='app-appointments-history.html'">
+    <div class="icon">📅</div>
+    <div class="label">مواعيدي</div>
+  </div>
+  <div class="nav-item" onclick="location.href='app-search.html'">
+    <div class="icon">🔍</div>
+    <div class="label">بحث</div>
+  </div>
+  <div class="nav-item active" onclick="location.href='app-user-profile.html'">
+    <div class="icon">👤</div>
+    <div class="label">حسابي</div>
+  </div>
+</div>
+        </div>
+    </main>
+
+    <script>
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const resultsCount = document.querySelector('.results-count strong');
+        
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value;
+            if (searchTerm.length > 0) {
+                // Update results count
+                const randomCount = Math.floor(Math.random() * 20) + 1;
+                resultsCount.textContent = `${randomCount} نتيجة`;
+                
+                // Show results
+                document.querySelector('.search-results').style.display = 'flex';
+                document.querySelector('.no-results').style.display = 'none';
+            } else {
+                // Show no results
+                document.querySelector('.search-results').style.display = 'none';
+                document.querySelector('.no-results').style.display = 'block';
+            }
+        });
+
+        // Tab switching
+        document.querySelectorAll('.tab-chip').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab-chip').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update results based on tab
+                console.log('Filter by:', this.textContent);
+            });
+        });
+
+        // Quick filter chips
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                updateFilterBadge();
+            });
+        });
+
+        // Filter modal functions
+        function openFilters() {
+            document.getElementById('filterModal').classList.add('show');
+        }
+
+        function closeFilters() {
+            document.getElementById('filterModal').classList.remove('show');
+        }
+
+        function resetFilters() {
+            // Reset all checkboxes
+            document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            updateFilterBadge();
+        }
+
+        function applyFilters() {
+            // Count selected filters
+            const checkedFilters = document.querySelectorAll('.filter-checkbox:checked').length;
+            
+            // Update badge
+            const badge = document.querySelector('.filter-badge');
+            if (checkedFilters > 0) {
+                badge.style.display = 'flex';
+                badge.textContent = checkedFilters;
+            } else {
+                badge.style.display = 'none';
+            }
+            
+            // Close modal
+            closeFilters();
+            
+            // Update results
+            console.log('Applied filters:', checkedFilters);
+        }
+
+        function updateFilterBadge() {
+            const selectedQuickFilters = document.querySelectorAll('.filter-chip.selected').length;
+            const checkedFilters = document.querySelectorAll('.filter-checkbox:checked').length;
+            const totalFilters = selectedQuickFilters + checkedFilters;
+            
+            const badge = document.querySelector('.filter-badge');
+            if (totalFilters > 0) {
+                badge.style.display = 'flex';
+                badge.textContent = totalFilters;
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        // Sort dropdown
+        document.querySelector('.sort-dropdown').addEventListener('change', function(e) {
+            console.log('Sort by:', e.target.value);
+            // Re-sort results
+        });
+
+        // Change location
+        document.querySelector('.change-location').addEventListener('click', function(e) {
+            e.preventDefault();
+            const cities = ['طرابلس', 'بنغازي', 'مصراتة', 'الزاوية', 'البيضاء'];
+            const currentCity = document.querySelector('.location-text').textContent.replace('البحث في: ', '');
+            const currentIndex = cities.indexOf(currentCity);
+            const nextIndex = (currentIndex + 1) % cities.length;
+            document.querySelector('.location-text').textContent = 'البحث في: ' + cities[nextIndex];
+        });
+
+        // Initialize filter badge
+        updateFilterBadge();
+    </script>
+</body>
+</html>

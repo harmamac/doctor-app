@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دكتور - مواعيدي</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #00bfa5 0%, #48d1aa 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Main Container */
+        .app-container {
+            width: 380px;
+            background: #f5f5f5;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        /* Phone Header */
+        .phone-header {
+            background: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .time {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 5px;
+            font-size: 14px;
+        }
+
+        /* App Header */
+        .app-header {
+            background: #00bfa5;
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .header-title {
+            flex: 1;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .filter-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Tabs Section */
+        .tabs-container {
+            background: white;
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .tab.active {
+            background: #00bfa5;
+            color: white;
+        }
+
+        .tab-badge {
+            background: rgba(255,255,255,0.3);
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+
+        /* Appointments List */
+        .appointments-container {
+            padding: 20px;
+            max-height: 520px;
+            overflow-y: auto;
+        }
+
+        .date-header {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .appointment-card {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .appointment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Status Ribbon */
+        .status-ribbon {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #00bfa5;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 0 15px 0 15px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .status-ribbon.upcoming {
+            background: #00bfa5;
+        }
+
+        .status-ribbon.completed {
+            background: #4caf50;
+        }
+
+        .status-ribbon.cancelled {
+            background: #f44336;
+        }
+
+        .status-ribbon.today {
+            background: #ff9800;
+        }
+
+        /* Card Content */
+        .card-header {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .doctor-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #00bfa5, #00a693);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+        }
+
+        .doctor-info {
+            flex: 1;
+        }
+
+        .doctor-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .clinic-name {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .appointment-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .detail-icon {
+            font-size: 16px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            padding-top: 15px;
+            border-top: 1px solid #f5f5f5;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .action-btn.primary {
+            background: #00bfa5;
+            color: white;
+            border: none;
+        }
+
+        .action-btn.danger {
+            color: #f44336;
+            border-color: #f44336;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.02);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        .empty-description {
+            font-size: 14px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            background: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #eee;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: #999;
+            font-size: 12px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav-item.active {
+            color: #00bfa5;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Phone Status Bar -->
+        <div class="phone-header">
+            <div class="time">9:41</div>
+            <div class="status-icons">
+                <span>📶</span>
+                <span>📶</span>
+                <span>🔋</span>
+            </div>
+        </div>
+
+        <!-- App Header -->
+        <div class="app-header">
+            <button class="back-btn">→</button>
+            <h2 class="header-title">مواعيدي</h2>
+            <button class="filter-btn">
+                <span>🎛️</span>
+                <span>فلترة</span>
+            </button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <button class="tab active">
+                القادمة
+                <span class="tab-badge">3</span>
+            </button>
+            <button class="tab">
+                المكتملة
+                <span class="tab-badge">12</span>
+            </button>
+            <button class="tab">
+                الملغاة
+                <span class="tab-badge">2</span>
+            </button>
+        </div>
+
+        <!-- Appointments List -->
+        <div class="appointments-container">
+            <!-- Today's Appointments -->
+            <div class="date-header">اليوم - السبت، 15 ديسمبر 2024</div>
+            
+            <div class="appointment-card">
+                <div class="status-ribbon today">اليوم</div>
+                <div class="card-header">
+                    <div class="doctor-avatar">👨‍⚕️</div>
+                    <div class="doctor-info">
+                        <div class="doctor-name">د. محمد الطرابلسي</div>
+                        <div class="clinic-name">مركز الشفاء الطبي - قسم القلب</div>
+                    </div>
+                </div>
+                <div class="appointment-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">📅</span>
+                        <span>اليوم</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">🕐</span>
+                        <span>10:00 ص</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">💰</span>
+                        <span>150 د.ل</span>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="action-btn primary">
+                        <span>📍</span>
+                        <span>الموقع</span>
+                    </button>
+                    <button class="action-btn">
+                        <span>📞</span>
+                        <span>اتصال</span>
+                    </button>
+                    <button class="action-btn danger">
+                        <span>❌</span>
+                        <span>إلغاء</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tomorrow's Appointments -->
+            <div class="date-header">غداً - الأحد، 16 ديسمبر 2024</div>
+            
+            <div class="appointment-card">
+                <div class="status-ribbon upcoming">قادم</div>
+                <div class="card-header">
+                    <div class="doctor-avatar">👩‍⚕️</div>
+                    <div class="doctor-info">
+                        <div class="doctor-name">د. فاطمة بنغازي</div>
+                        <div class="clinic-name">عيادة الابتسامة - طب الأسنان</div>
+                    </div>
+                </div>
+                <div class="appointment-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">📅</span>
+                        <span>غداً</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">🕐</span>
+                        <span>2:30 م</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">💰</span>
+                        <span>100 د.ل</span>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="action-btn primary">
+                        <span>✏️</span>
+                        <span>تعديل</span>
+                    </button>
+                    <button class="action-btn">
+                        <span>📞</span>
+                        <span>اتصال</span>
+                    </button>
+                    <button class="action-btn danger">
+                        <span>❌</span>
+                        <span>إلغاء</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Next Week -->
+            <div class="date-header">الأسبوع القادم</div>
+            
+            <div class="appointment-card">
+                <div class="status-ribbon upcoming">قادم</div>
+                <div class="card-header">
+                    <div class="doctor-avatar">👨‍⚕️</div>
+                    <div class="doctor-info">
+                        <div class="doctor-name">د. أحمد الصديق</div>
+                        <div class="clinic-name">عيادة الأطفال التخصصية</div>
+                    </div>
+                </div>
+                <div class="appointment-details">
+                    <div class="detail-item">
+                        <span class="detail-icon">📅</span>
+                        <span>22 ديسمبر</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">🕐</span>
+                        <span>11:00 ص</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-icon">💰</span>
+                        <span>80 د.ل</span>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="action-btn primary">
+                        <span>✏️</span>
+                        <span>تعديل</span>
+                    </button>
+                    <button class="action-btn">
+                        <span>⏰</span>
+                        <span>تذكير</span>
+                    </button>
+                    <button class="action-btn danger">
+                        <span>❌</span>
+                        <span>إلغاء</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+  <div class="nav-item" onclick="location.href='app-home.html'">
+    <div class="icon">🏠</div>
+    <div class="label">الرئيسية</div>
+  </div>
+  <div class="nav-item" onclick="location.href='app-appointments-history.html'">
+    <div class="icon">📅</div>
+    <div class="label">مواعيدي</div>
+  </div>
+  <div class="nav-item" onclick="location.href='app-search.html'">
+    <div class="icon">🔍</div>
+    <div class="label">بحث</div>
+  </div>
+  <div class="nav-item active" onclick="location.href='app-user-profile.html'">
+    <div class="icon">👤</div>
+    <div class="label">حسابي</div>
+  </div>
+</div>
+    </div>
+</body>
+</html>
