@@ -393,27 +393,14 @@
             color: #4caf50;
         }
 
-        .status-waiting {
-            background: #fff3e0;
-            color: #ff9800;
-        }
-
-        .status-new {
+        .status-in-progress {
             background: #e3f2fd;
             color: #2196f3;
-            animation: pulse 2s infinite;
         }
 
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.4);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(33, 150, 243, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(33, 150, 243, 0);
-            }
+        .status-completed {
+            background: #f3e5f5;
+            color: #9c27b0;
         }
 
         /* Quick Actions */
@@ -457,90 +444,76 @@
             font-weight: 500;
         }
 
-        /* Notification Popup */
-        .notification-popup {
-            position: fixed;
-            top: 80px;
-            left: 30px;
+        /* Recent Activity */
+        .activity-section {
             background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 5px 30px rgba(0,0,0,0.2);
-            display: none;
-            animation: slideIn 0.3s ease;
-            z-index: 200;
-            max-width: 350px;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 30px;
         }
 
-        @keyframes slideIn {
-            from {
-                transform: translateX(-100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+        .activity-list {
+            margin-top: 20px;
         }
 
-        .notification-popup.show {
-            display: block;
-        }
-
-        .popup-header {
+        .activity-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f5;
         }
 
-        .popup-icon {
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
             width: 40px;
             height: 40px;
-            background: #e3f2fd;
-            color: #2196f3;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
         }
 
-        .popup-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #333;
+        .activity-icon.booking {
+            background: #e3f2fd;
+            color: #2196f3;
         }
 
-        .popup-message {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.5;
+        .activity-icon.cancel {
+            background: #ffebee;
+            color: #f44336;
         }
 
-        .popup-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
+        .activity-icon.complete {
+            background: #e8f5e9;
+            color: #4caf50;
         }
 
-        .popup-btn {
+        .activity-details {
             flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
+        }
+
+        .activity-text {
             font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s;
+            color: #333;
+            margin-bottom: 3px;
         }
 
-        .popup-btn.accept {
-            background: #00bfa5;
-            color: white;
+        .activity-time {
+            font-size: 12px;
+            color: #999;
         }
 
-        .popup-btn.reject {
+        .activity-source {
+            padding: 4px 8px;
             background: #f5f5f5;
+            border-radius: 12px;
+            font-size: 11px;
             color: #666;
         }
     </style>
@@ -555,7 +528,7 @@
         <div class="header-right">
             <button class="notification-btn">
                 🔔
-                <span class="notification-badge">5</span>
+                <span class="notification-badge">2</span>
             </button>
             <div class="user-info">
                 <div class="user-details">
@@ -569,7 +542,7 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <a href="#" class="menu-item active">
+        <a href="clinic-dashboard.html" class="menu-item active">
             <span class="menu-icon">📊</span>
             <span class="menu-text">لوحة التحكم</span>
         </a>
@@ -577,11 +550,11 @@
             <span class="menu-icon">📅</span>
             <span class="menu-text">المواعيد</span>
         </a>
-        <a href="#" class="menu-item">
+        <a href="clinic-patients.html" class="menu-item">
             <span class="menu-icon">👥</span>
             <span class="menu-text">المرضى</span>
         </a>
-        <a href="#" class="menu-item">
+        <a href="clinic-doctors.html" class="menu-item">
             <span class="menu-icon">👨‍⚕️</span>
             <span class="menu-text">الأطباء</span>
         </a>
@@ -628,7 +601,7 @@
                     <span class="stat-change positive">+5%</span>
                 </div>
                 <div class="stat-value">18</div>
-                <div class="stat-label">مواعيد مؤكدة</div>
+                <div class="stat-label">مواعيد مكتملة</div>
             </div>
             
             <div class="stat-card">
@@ -637,7 +610,7 @@
                     <span class="stat-change negative">-2%</span>
                 </div>
                 <div class="stat-value">6</div>
-                <div class="stat-label">في الانتظار</div>
+                <div class="stat-label">قيد المعالجة</div>
             </div>
             
             <div class="stat-card">
@@ -659,7 +632,6 @@
                     <button class="view-all-btn">عرض الكل</button>
                 </div>
                 
-                <!-- New Appointment Alert -->
                 <div class="appointment-item">
                     <div class="appointment-time">
                         <div class="time-value">10:00</div>
@@ -669,7 +641,7 @@
                         <div class="patient-name">محمد علي أحمد</div>
                         <div class="doctor-name">د. محمد الطرابلسي - قسم القلب</div>
                     </div>
-                    <span class="appointment-status status-new">جديد</span>
+                    <span class="appointment-status status-confirmed">مؤكد</span>
                 </div>
                 
                 <div class="appointment-item">
@@ -681,7 +653,7 @@
                         <div class="patient-name">فاطمة أحمد</div>
                         <div class="doctor-name">د. عائشة الصديق - أطفال</div>
                     </div>
-                    <span class="appointment-status status-confirmed">مؤكد</span>
+                    <span class="appointment-status status-in-progress">جاري</span>
                 </div>
                 
                 <div class="appointment-item">
@@ -693,7 +665,7 @@
                         <div class="patient-name">خالد سالم</div>
                         <div class="doctor-name">د. فاطمة بنغازي - أسنان</div>
                     </div>
-                    <span class="appointment-status status-waiting">في الانتظار</span>
+                    <span class="appointment-status status-confirmed">مؤكد</span>
                 </div>
                 
                 <div class="appointment-item">
@@ -748,33 +720,52 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Notification Popup (appears when new booking arrives) -->
-    <div class="notification-popup" id="newBookingPopup">
-        <div class="popup-header">
-            <div class="popup-icon">🔔</div>
-            <div class="popup-title">حجز جديد!</div>
-        </div>
-        <div class="popup-message">
-            <strong>محمد علي أحمد</strong> يريد حجز موعد مع <strong>د. محمد الطرابلسي</strong> في قسم القلب<br>
-            التاريخ: اليوم - الوقت: 10:00 ص<br>
-            رقم الهاتف: 218 91 234 5678
-        </div>
-        <div class="popup-actions">
-            <button class="popup-btn accept">✓ قبول</button>
-            <button class="popup-btn reject">✕ رفض</button>
+        <!-- Recent Activity -->
+        <div class="activity-section">
+            <div class="section-header">
+                <h2 class="section-title">النشاط الأخير</h2>
+                <button class="view-all-btn">عرض الكل</button>
+            </div>
+            
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon booking">📅</div>
+                    <div class="activity-details">
+                        <div class="activity-text"><strong>حجز جديد:</strong> محمد علي أحمد - د. محمد الطرابلسي</div>
+                        <div class="activity-time">منذ 5 دقائق</div>
+                    </div>
+                    <span class="activity-source">📱 التطبيق</span>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon complete">✅</div>
+                    <div class="activity-details">
+                        <div class="activity-text"><strong>موعد مكتمل:</strong> سارة عبدالله - د. عائشة الصديق</div>
+                        <div class="activity-time">منذ 15 دقيقة</div>
+                    </div>
+                    <span class="activity-source">💻 النظام</span>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon booking">📅</div>
+                    <div class="activity-details">
+                        <div class="activity-text"><strong>حجز جديد:</strong> فاطمة أحمد - د. فاطمة بنغازي</div>
+                        <div class="activity-time">منذ 30 دقيقة</div>
+                    </div>
+                    <span class="activity-source">📞 هاتف</span>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon cancel">❌</div>
+                    <div class="activity-details">
+                        <div class="activity-text"><strong>إلغاء موعد:</strong> خالد محمد - د. أحمد الطرابلسي</div>
+                        <div class="activity-time">منذ ساعة</div>
+                    </div>
+                    <span class="activity-source">📱 التطبيق</span>
+                </div>
+            </div>
         </div>
     </div>
-
-    <script>
-        // Simulate new booking notification
-        setTimeout(() => {
-            document.getElementById('newBookingPopup').classList.add('show');
-            // Play notification sound
-            const audio = new Audio('notification.mp3');
-            // audio.play();
-        }, 3000);
-    </script>
 </body>
 </html>
