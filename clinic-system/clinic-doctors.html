@@ -1,336 +1,464 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>أطباء العيادة - مركز الشفاء الطبي</title>
-<!-- خطوط أيقونات رائعة -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f0f4f8;
-        color: #333;
-        line-height: 1.6;
-        direction: rtl;
-    }
-
-    /* رأس الصفحة */
-    .header {
-        background-color: #fff;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        padding: 15px 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: sticky;
-        top: 0;
-        z-index: 999;
-        height: 70px;
-    }
-    .header-left {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-    .logo {
-        background-color: #00bfa5;
-        width: 50px;
-        height: 50px;
-        border-radius: 12px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 24px;
-        color: #fff;
-        font-weight: bold;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    .clinic-name {
-        font-size: 22px;
-        font-weight: 600;
-        color: #444;
-    }
-    /* زر العودة */
-    .back-button {
-        background-color: #e0e0e0;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        transition: background 0.3s;
-    }
-    .back-button:hover {
-        background-color: #cfd8dc;
-    }
-
-    /* المحتوى */
-    .container {
-        max-width: 1200px;
-        margin: 20px auto;
-        padding: 15px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: center;
-        margin-right: 250px; /* إضافة هامش لاستيعاب الشريط الجانبي */
-    }
-
-    /* بطاقة الطبيب */
-    .doctor-card {
-        background-color: #fff;
-        border-radius: 15px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        width: 300px;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .doctor-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-    /* صورة الطبيب */
-    .doctor-img {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 15px;
-        border: 3px solid #00bfa5;
-    }
-    /* اسم الطبيب */
-    .doctor-name {
-        font-size: 20px;
-        font-weight: 600;
-        margin-bottom: 8px;
-        color: #333;
-        text-align: center;
-    }
-    /* التخصص */
-    .doctor-specialty {
-        font-size: 14px;
-        color: #777;
-        margin-bottom: 12px;
-        text-align: center;
-    }
-    /* معلومات التواصل */
-    .doctor-info {
-        width: 100%;
-        margin-top: 10px;
-    }
-    .info-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 8px;
-        font-size: 14px;
-        color: #555;
-    }
-    /* أزرار التواصل */
-    .contact-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 12px;
-        margin-top: 15px;
-    }
-    .btn {
-        padding: 8px 14px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        transition: all 0.3s;
-    }
-    .btn-whatsapp {
-        background-color: #25D366;
-        color: #fff;
-    }
-    .btn-whatsapp:hover {
-        background-color: #1da851;
-    }
-    .btn-call {
-        background-color: #00bfa5;
-        color: #fff;
-    }
-    .btn-call:hover {
-        background-color: #009e8a;
-    }
-
-    /* Sidebar */
-    .sidebar {
-        background: white;
-        width: 250px;
-        height: calc(100vh - 70px);
-        position: fixed;
-        right: 0;
-        top: 70px;
-        box-shadow: -2px 0 10px rgba(0,0,0,0.05);
-        overflow-y: auto;
-    }
-
-    .menu-item {
-        padding: 15px 25px;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        color: #666;
-        text-decoration: none;
-        transition: all 0.3s;
-        border-right: 3px solid transparent;
-    }
-
-    .menu-item:hover {
-        background: #f5f5f5;
-        color: #00bfa5;
-    }
-
-    .menu-item.active {
-        background: #e8f5f3;
-        color: #00bfa5;
-        border-right-color: #00bfa5;
-    }
-
-    .menu-icon {
-        font-size: 20px;
-    }
-
-    .menu-text {
-        font-size: 15px;
-        font-weight: 500;
-    }
-
-    /* استجابة الشاشة */
-    @media(max-width: 768px){
-        .container {
-            flex-direction: column;
-            align-items: center;
-            margin-right: 0;
-        }
-        .doctor-card {
-            width: 90%;
-        }
-        .sidebar {
-            width: 100%;
-            height: auto;
-            position: relative;
-            top: 0;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .menu-item {
-            padding: 10px 15px;
-            flex-direction: column;
-            gap: 5px;
-            border-right: none;
-            border-bottom: 3px solid transparent;
-        }
-        .menu-item.active {
-            border-right-color: transparent;
-            border-bottom-color: #00bfa5;
-        }
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دكتور - إدارة الأطباء</title>
+    <link rel="stylesheet" href="../css/clinic-doctors.css">
 </head>
 <body>
-
-<!-- رأس الصفحة -->
-<div class="header">
-    <div class="header-left">
-        <button class="back-button" onclick="window.location.href='clinic-patients.html'">
-            <i class="fas fa-arrow-left"></i> رجوع
-        </button>
-        <div class="logo">🏥</div>
-        <div class="clinic-name">مركز الشفاء الطبي</div>
-    </div>
-</div>
-
-<!-- الشريط الجانبي -->
-<div class="sidebar">
-    <a href="#" class="menu-item active">
-        <span class="menu-icon">📊</span>
-        <span class="menu-text">لوحة التحكم</span>
-    </a>
-    <a href="clinic-appointments.html" class="menu-item">
-        <span class="menu-icon">📅</span>
-        <span class="menu-text">المواعيد</span>
-    </a>
-    <a href="clinic-patients.html" class="menu-item">
-        <span class="menu-icon">👥</span>
-        <span class="menu-text">المرضى</span>
-    </a>
-    <a href="clinic-doctors.html" class="menu-item">
-        <span class="menu-icon">👨‍⚕️</span>
-        <span class="menu-text">الأطباء</span>
-    </a>
-    <a href="#" class="menu-item">
-        <span class="menu-icon">📆</span>
-        <span class="menu-text">الجدول</span>
-    </a>
-    <a href="#" class="menu-item">
-        <span class="menu-icon">📈</span>
-        <span class="menu-text">التقارير</span>
-    </a>
-    <a href="#" class="menu-item">
-        <span class="menu-icon">⚙️</span>
-        <span class="menu-text">الإعدادات</span>
-    </a>
-    <a href="#" class="menu-item">
-        <span class="menu-icon">🚪</span>
-        <span class="menu-text">تسجيل الخروج</span>
-    </a>
-</div>
-
-<!-- محتوى الأطباء -->
-<div class="container">
-    <!-- مثال على طبيب واحد، يمكنك تكراره أو إضافته ديناميكياً -->
-    <div class="doctor-card">
-        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="دكتور أحمد علي" class="doctor-img" />
-        <div class="doctor-name">الدكتور أحمد علي</div>
-        <div class="doctor-specialty">اختصاصي جراحة عامة</div>
-        <div class="doctor-info">
-            <div class="info-item"><i class="fas fa-phone"></i> هاتف: 218 91 234 5678</div>
-            <div class="info-item"><i class="fas fa-envelope"></i> بريد: ahmed.ali@clinic.com</div>
-            <div class="info-item"><i class="fas fa-map-marker-alt"></i> العنوان: مركز الشفاء، الطابق الثاني</div>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">🏥</div>
+            <div class="clinic-name">مركز الشفاء الطبي</div>
         </div>
-        <div class="contact-buttons">
-            <button class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> واتساب</button>
-            <button class="btn btn-call"><i class="fas fa-phone"></i> اتصال</button>
+        <div class="header-right">
+            <button class="notification-btn">
+                <span class="notification-icon">🔔</span>
+                <span class="notification-badge">3</span>
+            </button>
+            <div class="user-info">
+                <div class="user-details">
+                    <div class="user-name">أحمد محمد</div>
+                    <div class="user-role">مدير النظام</div>
+                </div>
+                <div class="user-avatar">👤</div>
+            </div>
         </div>
-    </div>
-    <!-- أضف المزيد من الأطباء هنا بناءً على الحاجة -->
-    <div class="doctor-card">
-        <img src="https://images.unsplash.com/photo-1544725176-7c40e5a7b0a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="دكتورة سارة محمد" class="doctor-img" />
-        <div class="doctor-name">الدكتورة سارة محمد</div>
-        <div class="doctor-specialty">اختصاصية صدرية</div>
-        <div class="doctor-info">
-            <div class="info-item"><i class="fas fa-phone"></i> هاتف: 218 91 987 6543</div>
-            <div class="info-item"><i class="fas fa-envelope"></i> بريد: s.sara@clinic.com</div>
-            <div class="info-item"><i class="fas fa-map-marker-alt"></i> العنوان: مركز الشفاء، الطابق الأول</div>
-        </div>
-        <div class="contact-buttons">
-            <button class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> واتساب</button>
-            <button class="btn btn-call"><i class="fas fa-phone"></i> اتصال</button>
-        </div>
-    </div>
-</div>
+    </header>
 
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <nav class="sidebar-nav">
+            <a href="clinic-dashboard.html" class="menu-item">
+                <span class="menu-icon">📊</span>
+                <span class="menu-text">لوحة التحكم</span>
+            </a>
+            <a href="clinic-appointments.html" class="menu-item">
+                <span class="menu-icon">📅</span>
+                <span class="menu-text">المواعيد</span>
+            </a>
+            <a href="clinic-patients.html" class="menu-item">
+                <span class="menu-icon">👥</span>
+                <span class="menu-text">المرضى</span>
+            </a>
+            <a href="clinic-doctors.html" class="menu-item active">
+                <span class="menu-icon">👨‍⚕️</span>
+                <span class="menu-text">الأطباء</span>
+            </a>
+            <a href="clinic-schedule.html" class="menu-item">
+                <span class="menu-icon">📆</span>
+                <span class="menu-text">الجدول</span>
+            </a>
+            <a href="clinic-reports.html" class="menu-item">
+                <span class="menu-icon">📈</span>
+                <span class="menu-text">التقارير</span>
+            </a>
+            <a href="clinic-settings.html" class="menu-item">
+                <span class="menu-icon">⚙️</span>
+                <span class="menu-text">الإعدادات</span>
+            </a>
+            <a href="#" class="menu-item">
+                <span class="menu-icon">🚪</span>
+                <span class="menu-text">تسجيل الخروج</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <section class="page-header">
+            <h1 class="page-title">إدارة الأطباء</h1>
+            <div class="header-actions">
+                <button class="btn btn-secondary">
+                    <span class="btn-icon">📤</span>
+                    <span>تصدير</span>
+                </button>
+                <button class="btn btn-primary">
+                    <span class="btn-icon">➕</span>
+                    <span>إضافة طبيب</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Statistics Cards -->
+        <section class="stats-section">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <span>👨‍⚕️</span>
+                </div>
+                <div class="stat-details">
+                    <h3 class="stat-value">24</h3>
+                    <p class="stat-label">إجمالي الأطباء</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <span>✅</span>
+                </div>
+                <div class="stat-details">
+                    <h3 class="stat-value">18</h3>
+                    <p class="stat-label">متواجد اليوم</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <span>🏖️</span>
+                </div>
+                <div class="stat-details">
+                    <h3 class="stat-value">4</h3>
+                    <p class="stat-label">في إجازة</p>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <span>📅</span>
+                </div>
+                <div class="stat-details">
+                    <h3 class="stat-value">156</h3>
+                    <p class="stat-label">موعد اليوم</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search and Filter -->
+        <section class="search-filter-section">
+            <div class="search-bar">
+                <div class="search-input-group">
+                    <input type="text" class="search-input" placeholder="ابحث باسم الطبيب أو التخصص..." id="searchInput">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <button class="btn btn-primary">بحث</button>
+            </div>
+
+            <div class="filter-chips">
+                <button class="filter-chip active" data-filter="all">الكل</button>
+                <button class="filter-chip" data-filter="available">متاح الآن</button>
+                <button class="filter-chip" data-filter="busy">مشغول</button>
+                <button class="filter-chip" data-filter="vacation">في إجازة</button>
+                <button class="filter-chip" data-filter="cardiology">قسم القلب</button>
+                <button class="filter-chip" data-filter="dentistry">قسم الأسنان</button>
+                <button class="filter-chip" data-filter="pediatrics">قسم الأطفال</button>
+            </div>
+        </section>
+
+        <!-- View Toggle -->
+        <section class="view-toggle">
+            <button class="toggle-btn active" data-view="grid">
+                <span>📊</span> عرض الشبكة
+            </button>
+            <button class="toggle-btn" data-view="table">
+                <span>📋</span> عرض الجدول
+            </button>
+        </section>
+
+        <!-- Doctors Grid -->
+        <section class="doctors-grid" id="gridView">
+            <!-- Doctor Card 1 -->
+            <article class="doctor-card" data-specialty="cardiology" data-status="available">
+                <div class="doctor-status available"></div>
+                <div class="doctor-header">
+                    <div class="doctor-avatar">
+                        <img src="../assets/doctors/doctor1.jpg" alt="د. محمد الطرابلسي" onerror="this.style.display='none'; this.parentElement.innerHTML='👨‍⚕️';">
+                    </div>
+                    <div class="doctor-badge">⭐ 4.9</div>
+                </div>
+                <div class="doctor-info">
+                    <h3 class="doctor-name">د. محمد الطرابلسي</h3>
+                    <p class="doctor-specialty">استشاري أمراض القلب</p>
+                    <p class="doctor-experience">خبرة 15 سنة</p>
+                </div>
+                <div class="doctor-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon">👥</span>
+                        <span class="stat-text">1250 مريض</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">📅</span>
+                        <span class="stat-text">8 مواعيد اليوم</span>
+                    </div>
+                </div>
+                <div class="doctor-schedule">
+                    <p class="schedule-label">أوقات العمل اليوم:</p>
+                    <p class="schedule-time">9:00 ص - 2:00 م</p>
+                </div>
+                <div class="doctor-actions">
+                    <button class="card-btn primary">عرض الملف</button>
+                    <button class="card-btn">الجدول</button>
+                </div>
+            </article>
+
+            <!-- Doctor Card 2 -->
+            <article class="doctor-card" data-specialty="dentistry" data-status="busy">
+                <div class="doctor-status busy"></div>
+                <div class="doctor-header">
+                    <div class="doctor-avatar">👩‍⚕️</div>
+                    <div class="doctor-badge">⭐ 4.8</div>
+                </div>
+                <div class="doctor-info">
+                    <h3 class="doctor-name">د. فاطمة بنغازي</h3>
+                    <p class="doctor-specialty">أخصائية طب الأسنان</p>
+                    <p class="doctor-experience">خبرة 10 سنوات</p>
+                </div>
+                <div class="doctor-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon">👥</span>
+                        <span class="stat-text">890 مريض</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">📅</span>
+                        <span class="stat-text">12 موعد اليوم</span>
+                    </div>
+                </div>
+                <div class="doctor-schedule">
+                    <p class="schedule-label">أوقات العمل اليوم:</p>
+                    <p class="schedule-time">10:00 ص - 6:00 م</p>
+                </div>
+                <div class="doctor-actions">
+                    <button class="card-btn primary">عرض الملف</button>
+                    <button class="card-btn">الجدول</button>
+                </div>
+            </article>
+
+            <!-- Doctor Card 3 -->
+            <article class="doctor-card" data-specialty="pediatrics" data-status="available">
+                <div class="doctor-status available"></div>
+                <div class="doctor-header">
+                    <div class="doctor-avatar">👩‍⚕️</div>
+                    <div class="doctor-badge">⭐ 5.0</div>
+                </div>
+                <div class="doctor-info">
+                    <h3 class="doctor-name">د. عائشة الصديق</h3>
+                    <p class="doctor-specialty">أخصائية طب الأطفال</p>
+                    <p class="doctor-experience">خبرة 12 سنة</p>
+                </div>
+                <div class="doctor-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon">👥</span>
+                        <span class="stat-text">1100 مريض</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">📅</span>
+                        <span class="stat-text">10 مواعيد اليوم</span>
+                    </div>
+                </div>
+                <div class="doctor-schedule">
+                    <p class="schedule-label">أوقات العمل اليوم:</p>
+                    <p class="schedule-time">8:00 ص - 3:00 م</p>
+                </div>
+                <div class="doctor-actions">
+                    <button class="card-btn primary">عرض الملف</button>
+                    <button class="card-btn">الجدول</button>
+                </div>
+            </article>
+
+            <!-- Doctor Card 4 -->
+            <article class="doctor-card" data-specialty="internal" data-status="vacation">
+                <div class="doctor-status vacation"></div>
+                <div class="doctor-header">
+                    <div class="doctor-avatar">👨‍⚕️</div>
+                    <div class="doctor-badge">⭐ 4.7</div>
+                </div>
+                <div class="doctor-info">
+                    <h3 class="doctor-name">د. أحمد الصديق</h3>
+                    <p class="doctor-specialty">استشاري الباطنة</p>
+                    <p class="doctor-experience">خبرة 20 سنة</p>
+                </div>
+                <div class="doctor-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon">👥</span>
+                        <span class="stat-text">2100 مريض</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">🏖️</span>
+                        <span class="stat-text">في إجازة</span>
+                    </div>
+                </div>
+                <div class="doctor-schedule">
+                    <p class="schedule-label">العودة:</p>
+                    <p class="schedule-time">20/12/2024</p>
+                </div>
+                <div class="doctor-actions">
+                    <button class="card-btn primary">عرض الملف</button>
+                    <button class="card-btn" disabled>الجدول</button>
+                </div>
+            </article>
+
+            <!-- Doctor Card 5 -->
+            <article class="doctor-card" data-specialty="orthopedics" data-status="available">
+                <div class="doctor-status available"></div>
+                <div class="doctor-header">
+                    <div class="doctor-avatar">👨‍⚕️</div>
+                    <div class="doctor-badge">⭐ 4.6</div>
+                </div>
+                <div class="doctor-info">
+                    <h3 class="doctor-name">د. خالد مصطفى</h3>
+                    <p class="doctor-specialty">جراح عظام</p>
+                    <p class="doctor-experience">خبرة 18 سنة</p>
+                </div>
+                <div class="doctor-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon">👥</span>
+                        <span class="stat-text">1450 مريض</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">📅</span>
+                        <span class="stat-text">6 مواعيد اليوم</span>
+                    </div>
+                </div>
+                <div class="doctor-schedule">
+                    <p class="schedule-label">أوقات العمل اليوم:</p>
+                    <p class="schedule-time">11:00 ص - 5:00 م</p>
+                </div>
+                <div class="doctor-actions">
+                    <button class="card-btn primary">عرض الملف</button>
+                    <button class="card-btn">الجدول</button>
+                </div>
+            </article>
+
+            <!-- Doctor Card 6 -->
+            <article class="doctor-card" data-specialty="dermatology" data-status="busy">
+                <div class="doctor-status busy"></div>
+                <div class="doctor-header">
+                    <div class="doctor-avatar">👩‍⚕️</div>
+                    <div class="doctor-badge">⭐ 4.9</div>
+                </div>
+                <div class="doctor-info">
+                    <h3 class="doctor-name">د. مريم سالم</h3>
+                    <p class="doctor-specialty">أخصائية الجلدية</p>
+                    <p class="doctor-experience">خبرة 8 سنوات</p>
+                </div>
+                <div class="doctor-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon">👥</span>
+                        <span class="stat-text">750 مريض</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">📅</span>
+                        <span class="stat-text">15 موعد اليوم</span>
+                    </div>
+                </div>
+                <div class="doctor-schedule">
+                    <p class="schedule-label">أوقات العمل اليوم:</p>
+                    <p class="schedule-time">9:00 ص - 4:00 م</p>
+                </div>
+                <div class="doctor-actions">
+                    <button class="card-btn primary">عرض الملف</button>
+                    <button class="card-btn">الجدول</button>
+                </div>
+            </article>
+        </section>
+
+        <!-- Doctors Table (Hidden by default) -->
+        <section class="doctors-table" id="tableView">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>الصورة</th>
+                        <th>اسم الطبيب</th>
+                        <th>التخصص</th>
+                        <th>سنوات الخبرة</th>
+                        <th>عدد المرضى</th>
+                        <th>المواعيد اليوم</th>
+                        <th>أوقات العمل</th>
+                        <th>الحالة</th>
+                        <th>التقييم</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><div class="table-avatar">👨‍⚕️</div></td>
+                        <td>د. محمد الطرابلسي</td>
+                        <td>استشاري أمراض القلب</td>
+                        <td>15 سنة</td>
+                        <td>1250</td>
+                        <td>8</td>
+                        <td>9:00 ص - 2:00 م</td>
+                        <td><span class="status-badge available">متاح</span></td>
+                        <td><span class="rating">⭐ 4.9</span></td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="action-btn view" title="عرض">👁</button>
+                                <button class="action-btn edit" title="تعديل">✏️</button>
+                                <button class="action-btn schedule" title="الجدول">📅</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div class="table-avatar">👩‍⚕️</div></td>
+                        <td>د. فاطمة بنغازي</td>
+                        <td>أخصائية طب الأسنان</td>
+                        <td>10 سنوات</td>
+                        <td>890</td>
+                        <td>12</td>
+                        <td>10:00 ص - 6:00 م</td>
+                        <td><span class="status-badge busy">مشغول</span></td>
+                        <td><span class="rating">⭐ 4.8</span></td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="action-btn view" title="عرض">👁</button>
+                                <button class="action-btn edit" title="تعديل">✏️</button>
+                                <button class="action-btn schedule" title="الجدول">📅</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div class="table-avatar">👩‍⚕️</div></td>
+                        <td>د. عائشة الصديق</td>
+                        <td>أخصائية طب الأطفال</td>
+                        <td>12 سنة</td>
+                        <td>1100</td>
+                        <td>10</td>
+                        <td>8:00 ص - 3:00 م</td>
+                        <td><span class="status-badge available">متاح</span></td>
+                        <td><span class="rating">⭐ 5.0</span></td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="action-btn view" title="عرض">👁</button>
+                                <button class="action-btn edit" title="تعديل">✏️</button>
+                                <button class="action-btn schedule" title="الجدول">📅</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div class="table-avatar">👨‍⚕️</div></td>
+                        <td>د. أحمد الصديق</td>
+                        <td>استشاري الباطنة</td>
+                        <td>20 سنة</td>
+                        <td>2100</td>
+                        <td>-</td>
+                        <td>في إجازة</td>
+                        <td><span class="status-badge vacation">إجازة</span></td>
+                        <td><span class="rating">⭐ 4.7</span></td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="action-btn view" title="عرض">👁</button>
+                                <button class="action-btn edit" title="تعديل">✏️</button>
+                                <button class="action-btn schedule" title="الجدول" disabled>📅</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Pagination -->
+        <section class="pagination">
+            <button class="page-btn">→</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">←</button>
+        </section>
+    </main>
+
+    <!-- JavaScript -->
+    <script src="../js/clinic-doctors.js"></script>
 </body>
 </html>
